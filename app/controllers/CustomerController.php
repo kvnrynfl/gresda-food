@@ -103,8 +103,9 @@ class CustomerController extends Controller {
     }
 
     public function checkout() {
-        // Payment and shipping confirm logic
-        $this->view('customer/checkout');
+        $orderModel = $this->model('OrderModel');
+        $data['payment_methods'] = $orderModel->getAllPayments();
+        $this->view('customer/checkout', $data);
     }
 
     public function processCheckout() {
@@ -126,11 +127,38 @@ class CustomerController extends Controller {
                 // Update Total in Database
                 $orderModel->updateCartTotal($activeCart['order_id'], $grandTotal);
 
-                // Should handle file upload for payment proof here according to full implementation
-                // For now, mark as Payment status
+                // Handle file upload for payment proof
+                $image_name = '';
+                if (isset($_FILES['payment_proof']) && $_FILES['payment_proof']['error'] == 0) {
+                    $upload = Upload::image($_FILES['payment_proof'], '../public/images/confirm');
+                    if ($upload['status']) {
+                        $image_name = $upload['filename'];
+                    } else {
+                        $_SESSION['flash_error'] = "Gagal mengunggah bukti pembayaran: " . $upload['message'];
+                        $this->redirect('/customer/checkout');
+                        return;
+                    }
+                } else {
+                    $_SESSION['flash_error'] = "Bukti pembayaran wajib diunggah.";
+                    $this->redirect('/customer/checkout');
+                    return;
+                }
+
+                // Add to tbl_confirmorder
+                $confirmData = [
+                    'order_id' => $activeCart['order_id'],
+                    'user_id' => $_SESSION['user_id'],
+                    'payment' => Sanitize::string($_POST['payment_method']),
+                    'rekening_name' => Sanitize::string($_POST['rekening_name']),
+                    'image_name' => $image_name,
+                    'alamat' => Sanitize::string($_POST['address']),
+                    'tgl_pay' => date('Y-m-d') 
+                ];
+                $orderModel->saveConfirmOrder($confirmData);
+                
                 $orderModel->updateOrderStatus($activeCart['order_id'], 'Payment');
                 
-                // Add to tbl_confirmorder (skipped details for brevity in this refactor, but would go here)
+                $_SESSION['flash_success'] = "Pembayaran berhasil dikonfirmasi. Pesanan sedang diproses.";
             }
             $this->redirect('/customer/orders');
         }
@@ -184,7 +212,12 @@ class CustomerController extends Controller {
                 if ($isValid) {
                     $hashedNew = password_hash($newPassword, PASSWORD_BCRYPT);
                     $userModel->updatePassword($user['id'], $hashedNew);
+                    $_SESSION['flash_success'] = "Kata sandi berhasil diperbarui.";
+                } else {
+                    $_SESSION['flash_error'] = "Kata sandi lama salah.";
                 }
+            } else {
+                $_SESSION['flash_error'] = "Konfirmasi kata sandi tidak cocok.";
             }
             $this->redirect('/customer/profile');
         }
@@ -200,17 +233,22 @@ class CustomerController extends Controller {
             $data = Sanitize::array($_POST);
             $userModel = $this->model('UserModel');
             
-            // Image Upload Logic could go here
             if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
                 $upload = Upload::image($_FILES['image'], '../public/images/users');
                 if ($upload['status']) {
                     $data['img_user'] = $upload['filename'];
+                } else {
+                    $_SESSION['flash_error'] = "Gagal mengunggah foto: " . $upload['message'];
+                    $this->redirect('/customer/editProfile');
+                    return;
                 }
             }
             
             $userModel->updateProfile($_SESSION['user_id'], $data);
             $_SESSION['username'] = $data['username']; // Update session
+            $_SESSION['email'] = $data['email'];
             
+            $_SESSION['flash_success'] = "Profil berhasil diperbarui.";
             $this->redirect('/customer/profile');
         }
     }
