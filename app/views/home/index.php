@@ -2,14 +2,14 @@
 
 <!-- Hero Section -->
 <section class="relative bg-secondary text-white min-h-[85vh] flex items-center pt-16">
-    <div class="absolute inset-0 z-0 bg-black/60"></div>
-    
     <!-- Dynamic Background Image Container -->
-    <div id="hero-bg-container" class="absolute inset-0 z-[-1] overflow-hidden">
+    <div id="hero-bg-container" class="absolute inset-0 z-0 overflow-hidden">
         <!-- JS will inject layers here -->
     </div>
+
+    <div class="absolute inset-0 z-10 bg-black/60 flex"></div>
     
-    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
+    <div class="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center w-full">
         <div class="bg-black/50 backdrop-blur-sm p-10 md:p-14 rounded-3xl shadow-2xl flex flex-col items-center max-w-4xl border border-white/10">
             <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 drop-shadow-xl animate-fade-in-up">
                 Pengalaman <span class="text-primary italic">Rasa Premium</span> 
@@ -165,7 +165,7 @@
             // Create image layers
             const layers = images.map((src, index) => {
                 const div = document.createElement('div');
-                div.className = `absolute inset-0 z-[-1] bg-cover bg-center transition-opacity duration-1000 ease-in-out bg-zoom ${index === 0 ? 'opacity-100' : 'opacity-0'}`;
+                div.className = `absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out bg-zoom ${index === 0 ? 'opacity-100' : 'opacity-0'}`;
                 div.style.backgroundImage = `url('${src}')`;
                 heroBgContainer.appendChild(div);
                 return div;
