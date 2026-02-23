@@ -11,15 +11,15 @@
     
     <div class="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center w-full">
         <div class="flex flex-col items-center max-w-4xl">
-            <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] animate-fade-in-up">
+            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-4 drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] animate-fade-in-up">
                 Pengalaman <span class="text-primary italic">Rasa Premium</span> 
                 <br>Keunggulan Kuliner
             </h1>
-            <p class="text-xl md:text-2xl text-gray-200 mb-10 drop-shadow-md">
+            <p class="text-xl text-gray-300 mb-10 drop-shadow-md">
                 Gresda Food & Beverage menawarkan hidangan steak kelas dunia, sajian barat yang lezat, dan suasana yang menenangkan.
             </p>
         <div class="flex flex-col sm:flex-row gap-4">
-            <a href="#menu" class="px-8 py-4 bg-primary text-white rounded-full font-bold text-lg hover:bg-cyan-700 hover:scale-105 transition transform shadow-lg flex items-center gap-2">
+            <a href="menu" class="px-8 py-4 bg-primary text-white rounded-full font-bold text-lg hover:bg-cyan-700 hover:scale-105 transition transform shadow-lg flex items-center gap-2">
                 <i class="fas fa-utensils"></i> Lihat Menu
             </a>
             <a href="<?= BASEURL ?>/about" class="px-8 py-4 bg-white/90 text-secondary rounded-full font-bold text-lg hover:bg-white hover:scale-105 transition transform shadow-lg flex items-center gap-2">
