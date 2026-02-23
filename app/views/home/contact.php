@@ -1,10 +1,10 @@
 <?php include '../app/views/layouts/header.php'; ?>
 
 <!-- Page Header -->
-<div class="bg-secondary text-white py-16">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+<div class="bg-secondary text-white pt-24 pb-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center animate-fade-in-up">
         <h1 class="text-4xl md:text-5xl font-extrabold mb-4">Hubungi Kami</h1>
-        <p class="text-xl text-gray-300">Kami senang mendengar dari Anda. Hubungi kami untuk reservasi atau pertanyaan.</p>
+        <p class="text-gray-300 text-lg max-w-2xl mx-auto">Kami senang mendengar dari Anda. Hubungi kami untuk reservasi atau pertanyaan.</p>
     </div>
 </div>
 
