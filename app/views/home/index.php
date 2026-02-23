@@ -18,11 +18,11 @@
             <p class="text-xl text-gray-300 mb-10 drop-shadow-md">
                 Gresda Food & Beverage menawarkan hidangan steak kelas dunia, sajian barat yang lezat, dan suasana yang menenangkan.
             </p>
-        <div class="flex flex-col sm:flex-row gap-4">
-            <a href="menu" class="px-8 py-4 bg-primary text-white rounded-full font-bold text-lg hover:bg-cyan-700 hover:scale-105 transition transform shadow-lg flex items-center gap-2">
+        <div class="flex flex-col sm:flex-row gap-4 mt-4">
+            <a href="menu" class="px-6 py-3 bg-primary text-white rounded-full font-semibold text-base hover:bg-cyan-700 hover:scale-105 transition transform shadow-md flex items-center justify-center gap-2">
                 <i class="fas fa-utensils"></i> Lihat Menu
             </a>
-            <a href="<?= BASEURL ?>/about" class="px-8 py-4 bg-white/90 text-secondary rounded-full font-bold text-lg hover:bg-white hover:scale-105 transition transform shadow-lg flex items-center gap-2">
+            <a href="<?= BASEURL ?>/about" class="px-6 py-3 bg-white/90 text-secondary rounded-full font-semibold text-base hover:bg-white hover:scale-105 transition transform shadow-md flex items-center justify-center gap-2">
                 <i class="fas fa-info-circle"></i> Temukan Info Lebih Lanjut
             </a>
         </div>
@@ -97,6 +97,61 @@
                     <p class="text-gray-500">Tidak ada menu populer yang ditemukan.</p>
                 <?php endif; ?>
             </div>
+        </div>
+    </div>
+</section>
+
+<!-- Customer Reviews Section -->
+<?php if (isset($data['reviews']) && count($data['reviews']) > 0): ?>
+<section id="reviews" class="py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-primary font-bold tracking-widest uppercase text-sm mb-2">Testimoni</h2>
+            <h3 class="text-4xl font-extrabold text-secondary mb-4">Ulasan Pengunjung</h3>
+            <p class="text-gray-500 max-w-2xl mx-auto">Lihat apa yang dikatakan pelanggan kami tentang pengalaman bersantap mereka di Gresda Food & Beverage.</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <?php 
+            $displayReviews = array_slice($data['reviews'], 0, 3); // Tampilkan maksimal 3 ulasan di beranda
+            foreach ($displayReviews as $review): 
+            ?>
+            <div class="bg-gray-50 rounded-2xl p-8 shadow-sm border border-gray-100 hover:shadow-md transition">
+                <div class="flex items-center gap-1 mb-4 text-yellow-500">
+                    <?php for($i=1; $i<=5; $i++): ?>
+                        <i class="fas fa-star <?= $i <= $review['rating'] ? '' : 'text-gray-300' ?>"></i>
+                    <?php endfor; ?>
+                </div>
+                <p class="text-gray-700 italic mb-6 leading-relaxed line-clamp-4">"<?= htmlspecialchars($review['message']) ?>"</p>
+                <div class="flex items-center gap-4 mt-auto">
+                    <img src="<?= BASEURL ?>/images/users/<?= htmlspecialchars($review['img_user'] ?? 'default.jpg') ?>" onerror="this.src='https://ui-avatars.com/api/?name=<?= urlencode($review['username'] ?? 'User') ?>&background=E53E3E&color=fff'" alt="<?= htmlspecialchars($review['username']) ?>" class="w-12 h-12 rounded-full object-cover shadow-sm bg-white">
+                    <div>
+                        <h4 class="font-bold text-secondary text-sm"><?= htmlspecialchars($review['username']) ?></h4>
+                        <span class="text-xs text-gray-500">Pelanggan Gresda</span>
+                    </div>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</section>
+<?php endif; ?>
+
+<!-- Call to Action / Contact Info -->
+<section class="py-20 bg-secondary relative overflow-hidden">
+    <div class="absolute inset-0 z-0">
+        <img src="<?= BASEURL ?>/images/aesthetic/02.jpg" class="w-full h-full object-cover opacity-20 filter grayscale" alt="Background">
+    </div>
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center text-white">
+        <h2 class="text-3xl md:text-5xl font-bold mb-6">Siap Menikmati Hidangan Kami?</h2>
+        <p class="text-xl text-gray-300 mb-10">Kunjungi lokasi kami atau hubungi kami untuk reservasi dan pertanyaan lebih lanjut. Kami menantikan kehadiran Anda.</p>
+        <div class="flex flex-col sm:flex-row justify-center gap-4">
+            <a href="<?= BASEURL ?>/contact" class="px-8 py-4 bg-primary text-white rounded-full font-bold text-lg hover:bg-cyan-700 transition shadow-lg inline-flex justify-center items-center gap-2">
+                <i class="fas fa-map-marker-alt"></i> Lokasi & Kontak
+            </a>
+            <a href="https://wa.me/6281234567890" target="_blank" class="px-8 py-4 bg-green-500 text-white rounded-full font-bold text-lg hover:bg-green-600 transition shadow-lg inline-flex justify-center items-center gap-2">
+                <i class="fab fa-whatsapp text-xl"></i> Chat WhatsApp
+            </a>
         </div>
     </div>
 </section>
