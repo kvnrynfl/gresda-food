@@ -29,8 +29,8 @@
                         <?php 
                         $totalPrice = 0;
                         foreach($details as $item): 
-                            // Note: We multiply by 1000 here for proper IDR formatting display
-                            $subtotal = ($item['price'] ?? 0) * 1000 * ($item['qty'] ?? 1);
+                            // Note: We use original price without multiplier here
+                            $subtotal = ($item['price'] ?? 0) * ($item['qty'] ?? 1);
                             $totalPrice += $subtotal;
                         ?>
                             <div class="flex items-center justify-between border-b border-gray-100 pb-6 last:border-0 last:pb-0">
@@ -41,7 +41,7 @@
                                     <div>
                                         <h4 class="font-bold text-gray-800 text-lg"><?= htmlspecialchars($item['name'] ?? 'Item') ?></h4>
                                         <p class="text-sm text-gray-500 font-medium">
-                                            <?= htmlspecialchars($item['qty'] ?? 1) ?>x @ Rp <?= number_format(($item['price'] ?? 0) * 1000, 0, ',', '.') ?>
+                                            <?= htmlspecialchars($item['qty'] ?? 1) ?>x @ Rp <?= number_format($item['price'] ?? 0, 0, ',', '.') ?>
                                         </p>
                                     </div>
                                 </div>

@@ -37,7 +37,7 @@ include '../app/views/layouts/header.php';
                                 </td>
                                 </td>
                                 <td class="px-6 py-4 font-bold text-gray-800">
-                                    Rp <?= number_format(($order['total'] ?? 0) * 1000, 0, ',', '.') ?>
+                                    Rp <?= number_format($order['total'] ?? 0, 0, ',', '.') ?>
                                 </td>
                                 <td class="px-6 py-4 text-center">
                                     <?php 

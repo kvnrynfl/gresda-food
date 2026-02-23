@@ -57,6 +57,51 @@ class CustomerController extends Controller {
         }
     }
 
+    public function updateCartQty() {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && CSRF::verifyToken($_POST['csrf_token'] ?? '')) {
+            $foodId = Sanitize::string($_POST['food_id']);
+            $action = Sanitize::string($_POST['action']);
+            
+            $orderModel = $this->model('OrderModel');
+            $activeCart = $orderModel->getActiveCartByUser($_SESSION['user_id']);
+            
+            if ($activeCart) {
+                $items = $orderModel->getOrderDetails($activeCart['order_id']);
+                $currentQty = 0;
+                foreach ($items as $item) {
+                    if ($item['food_id'] == $foodId) {
+                        $currentQty = $item['qty'];
+                        break;
+                    }
+                }
+                
+                if ($currentQty > 0) {
+                    if ($action == 'increase') {
+                        $newQty = $currentQty + 1;
+                        $orderModel->updateDetailQty($activeCart['order_id'], $foodId, $newQty);
+                    } elseif ($action == 'decrease' && $currentQty > 1) {
+                        $newQty = $currentQty - 1;
+                        $orderModel->updateDetailQty($activeCart['order_id'], $foodId, $newQty);
+                    }
+                }
+            }
+            $this->redirect('/customer/cart');
+        }
+    }
+
+    public function removeFromCart() {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && CSRF::verifyToken($_POST['csrf_token'] ?? '')) {
+            $foodId = Sanitize::string($_POST['food_id']);
+            $orderModel = $this->model('OrderModel');
+            $activeCart = $orderModel->getActiveCartByUser($_SESSION['user_id']);
+            
+            if ($activeCart) {
+                $orderModel->removeDetailItem($activeCart['order_id'], $foodId);
+            }
+            $this->redirect('/customer/cart');
+        }
+    }
+
     public function checkout() {
         // Payment and shipping confirm logic
         $this->view('customer/checkout');

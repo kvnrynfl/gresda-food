@@ -44,7 +44,7 @@ include '../app/views/layouts/admin_header.php';
                                 </div>
                             </div>
                         </td>
-                        <td class="px-6 py-4 font-bold text-gray-700">Rp <?= number_format(($food['price'] ?? 0) * 1000, 0, ',', '.') ?></td>
+                        <td class="px-6 py-4 font-bold text-gray-700">Rp <?= number_format($food['price'] ?? 0, 0, ',', '.') ?></td>
                         <td class="px-6 py-4 text-sm text-gray-500">
                             <span class="bg-gray-100 px-3 py-1 rounded text-xs font-semibold uppercase tracking-wide"><?= htmlspecialchars($food['category']) ?></span>
                         </td>

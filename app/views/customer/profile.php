@@ -70,7 +70,7 @@
                             </div>
                             <div class="text-right">
                                 <span class="inline-block px-3 py-1 <?= $statusClass ?> rounded-full text-xs font-bold mb-1"><?= htmlspecialchars($statusText) ?></span>
-                                <p class="font-bold text-gray-800">Rp <?= number_format(($order['total'] ?? 0) * 1000, 0, ',', '.') ?></p>
+                                <p class="font-bold text-gray-800">Rp <?= number_format($order['total'] ?? 0, 0, ',', '.') ?></p>
                             </div>
                         </div>
                         <?php endforeach; ?>

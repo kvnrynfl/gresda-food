@@ -54,26 +54,34 @@
                                     </div>
                                     <div class="col-span-1 sm:col-span-2 flex justify-between sm:justify-center items-center">
                                         <span class="sm:hidden font-semibold text-gray-500">Harga:</span>
-                                        <span class="text-gray-700 font-medium">Rp <?= number_format(($item['price'] ?? 0) * 1000, 0, ',', '.') ?></span>
+                                        <span class="text-gray-700 font-medium">Rp <?= number_format($item['price'] ?? 0, 0, ',', '.') ?></span>
                                     </div>
                                     <div class="col-span-1 sm:col-span-2 flex justify-between sm:justify-center items-center">
                                         <span class="sm:hidden font-semibold text-gray-500">Kuantitas:</span>
                                         <!-- Real app needs ajax qty update here -->
-                                        <div class="flex items-center border border-gray-200 rounded-lg bg-gray-50 h-10 w-24">
-                                            <button class="px-3 hover:text-primary transition font-bold" type="button">-</button>
+                                        <form action="<?= BASEURL ?>/customer/updateCartQty" method="POST" class="flex items-center border border-gray-200 rounded-lg bg-gray-50 h-10 w-24">
+                                            <?= CSRF::getTokenField() ?>
+                                            <input type="hidden" name="food_id" value="<?= $item['food_id'] ?>">
+                                            <button type="submit" name="action" value="decrease" class="px-3 hover:text-primary transition font-bold" <?= $item['qty'] <= 1 ? 'disabled class="opacity-50 cursor-not-allowed"' : '' ?>>-</button>
                                             <input type="text" value="<?= $item['qty'] ?>" class="w-full text-center bg-transparent border-none focus:ring-0 text-sm font-semibold p-0" readonly>
-                                            <button class="px-3 hover:text-primary transition font-bold" type="button">+</button>
-                                        </div>
+                                            <button type="submit" name="action" value="increase" class="px-3 hover:text-primary transition font-bold">+</button>
+                                        </form>
                                     </div>
                                     <div class="col-span-1 sm:col-span-2 flex justify-between sm:justify-end items-center">
                                         <span class="sm:hidden font-semibold text-gray-500">Subtotal:</span>
-                                        <span class="text-secondary font-bold text-lg">Rp <?= number_format($subtotal * 1000, 0, ',', '.') ?></span>
+                                        <span class="text-secondary font-bold text-lg">Rp <?= number_format($subtotal, 0, ',', '.') ?></span>
                                     </div>
 
                                     <!-- Remove Button -->
-                                    <button class="absolute top-4 right-4 sm:-right-4 sm:top-auto sm:opacity-0 group-hover:opacity-100 group-hover:right-4 transition-all w-8 h-8 bg-cyan-100 text-cyan-500 rounded-full flex items-center justify-center hover:bg-cyan-500 hover:text-white" title="Hapus item">
-                                        <i class="fas fa-trash-alt text-xs"></i>
-                                    </button>
+                                    <div class="absolute top-4 right-4 sm:-right-4 sm:top-auto sm:opacity-0 group-hover:opacity-100 group-hover:right-4 transition-all">
+                                        <form action="<?= BASEURL ?>/customer/removeFromCart" method="POST">
+                                            <?= CSRF::getTokenField() ?>
+                                            <input type="hidden" name="food_id" value="<?= $item['food_id'] ?>">
+                                            <button type="submit" class="w-8 h-8 bg-cyan-100 text-cyan-500 rounded-full flex items-center justify-center hover:bg-cyan-500 hover:text-white" title="Hapus item">
+                                                <i class="fas fa-trash-alt text-xs"></i>
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
                             <?php endforeach; ?>
                         </div>
@@ -90,11 +98,11 @@
                         <div class="space-y-4 mb-6">
                             <div class="flex justify-between text-gray-600">
                                 <span>Subtotal</span>
-                                <span class="font-medium text-gray-800">Rp <?= number_format($totalPrice * 1000, 0, ',', '.') ?></span>
+                                <span class="font-medium text-gray-800">Rp <?= number_format($totalPrice, 0, ',', '.') ?></span>
                             </div>
                             <div class="flex justify-between text-gray-600">
                                 <span>Pajak (10%)</span>
-                                <span class="font-medium text-gray-800">Rp <?= number_format(($totalPrice * 1000) * 0.1, 0, ',', '.') ?></span>
+                                <span class="font-medium text-gray-800">Rp <?= number_format($totalPrice * 0.1, 0, ',', '.') ?></span>
                             </div>
                             <div class="flex justify-between text-gray-600">
                                 <span>Pengiriman</span>
@@ -105,7 +113,7 @@
                         <div class="border-t border-gray-200 pt-4 mb-8">
                             <div class="flex justify-between items-center">
                                 <span class="text-lg font-bold text-gray-800">Total</span>
-                                <span class="text-3xl font-extrabold text-primary">Rp <?= number_format((($totalPrice * 1000) * 1.1) + 15000, 0, ',', '.') ?></span>
+                                <span class="text-3xl font-extrabold text-primary">Rp <?= number_format(($totalPrice * 1.1) + 15000, 0, ',', '.') ?></span>
                             </div>
                             <p class="text-xs text-gray-400 mt-1 text-right">Termasuk pajak & pengiriman</p>
                         </div>

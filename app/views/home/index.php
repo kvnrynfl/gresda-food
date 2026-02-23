@@ -104,7 +104,7 @@
                                     $fallbackImg = "https://images.unsplash.com/photo-1544025162-d76694265947?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80";
                                 ?>
                                 <img src="<?= $imgUrl ?>" alt="<?= htmlspecialchars($food['name']) ?>" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" onerror="this.src='<?= $fallbackImg ?>'">
-                                <span class="absolute top-4 right-4 bg-white text-secondary font-bold px-3 py-1 rounded-full shadow z-20">Rp <?= number_format(($food['price'] ?? 0) * 1000, 0, ',', '.') ?></span>
+                                <span class="absolute top-4 right-4 bg-white text-secondary font-bold px-3 py-1 rounded-full shadow z-20">Rp <?= number_format($food['price'] ?? 0, 0, ',', '.') ?></span>
                             </div>
                             <div class="p-6 flex-grow flex flex-col">
                                 <h4 class="text-xl font-bold text-gray-800 mb-2 truncate" title="<?= htmlspecialchars($food['name']) ?>"><?= htmlspecialchars($food['name']) ?></h4>

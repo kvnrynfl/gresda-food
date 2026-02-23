@@ -67,6 +67,13 @@ class OrderModel extends Database {
         return $this->execute();
     }
 
+    public function removeDetailItem($order_id, $food_id) {
+        $this->query("DELETE FROM tbl_detailorder WHERE order_id = :order_id AND food_id = :food_id");
+        $this->bind(':order_id', $order_id);
+        $this->bind(':food_id', $food_id);
+        return $this->execute();
+    }
+
     public function updateOrderStatus($order_id, $status) {
         $this->query("UPDATE tbl_cart SET status = :status WHERE order_id = :order_id");
         $this->bind(':status', $status);
