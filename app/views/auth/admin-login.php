@@ -11,9 +11,9 @@
     
     <div class="w-full max-w-md bg-slate-800/90 backdrop-blur-md p-10 rounded-2xl shadow-2xl border border-slate-700">
         <div class="text-center mb-8">
-            <img src="<?= BASEURL ?>/images/logo/LogoGresdaBiruHitamNoBG.jpg" alt="Logo" class="h-16 w-16 mx-auto rounded-full mb-4 shadow-lg border-2 border-cyan-500">
-            <h1 class="text-3xl font-bold tracking-tight text-cyan-500">Portal Admin</h1>
-            <p class="text-slate-400 mt-2 text-sm">Manajemen Gresda Food & Beverage</p>
+            <img src="<?= BASEURL ?>/images/logo/LogoGresdaBiruPutihNoBG.jpg" alt="Logo" class="h-16 w-16 mx-auto rounded-full mb-4 shadow-lg border-2 border-cyan-500">
+            <h1 class="text-3xl font-bold tracking-tight text-cyan-500">Selamat datang kembali, admin</h1>
+            <p class="text-slate-400 mt-2 text-sm">Masuk untuk mengelola Gresda Food & Beverage</p>
         </div>
 
         <?php if (!empty($error)): ?>
