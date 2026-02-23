@@ -80,4 +80,11 @@ class OrderModel extends Database {
         $this->bind(':order_id', $order_id);
         return $this->execute();
     }
+
+    public function updateCartTotal($order_id, $total) {
+        $this->query("UPDATE tbl_cart SET total = :total WHERE order_id = :order_id");
+        $this->bind(':total', $total);
+        $this->bind(':order_id', $order_id);
+        return $this->execute();
+    }
 }

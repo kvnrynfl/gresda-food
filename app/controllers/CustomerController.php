@@ -113,6 +113,19 @@ class CustomerController extends Controller {
             $activeCart = $orderModel->getActiveCartByUser($_SESSION['user_id']);
             
             if ($activeCart) {
+                // Calculate Total
+                $items = $orderModel->getOrderDetails($activeCart['order_id']);
+                $totalPrice = 0;
+                foreach ($items as $item) {
+                    $totalPrice += ($item['price'] ?? 0) * ($item['qty'] ?? 1);
+                }
+                
+                // Calculate Grand Total including Tax (10%) and Shipping (15000)
+                $grandTotal = ($totalPrice * 1.1) + 15000;
+                
+                // Update Total in Database
+                $orderModel->updateCartTotal($activeCart['order_id'], $grandTotal);
+
                 // Should handle file upload for payment proof here according to full implementation
                 // For now, mark as Payment status
                 $orderModel->updateOrderStatus($activeCart['order_id'], 'Payment');
