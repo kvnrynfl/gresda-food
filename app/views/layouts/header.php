@@ -49,7 +49,7 @@
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="<?= BASEURL ?>/" class="nav-link font-medium hover:text-primary transition <?php echo (isset($title) && $title === 'Home') ? 'text-white' : 'text-gray-600'; ?>">Beranda</a>
                     <a href="<?= BASEURL ?>/about" class="nav-link font-medium hover:text-primary transition <?php echo (isset($title) && $title === 'Home') ? 'text-white' : 'text-gray-600'; ?>">Tentang Kami</a>
-                    <a href="<?= BASEURL ?>/#menu" class="nav-link font-medium hover:text-primary transition <?php echo (isset($title) && $title === 'Home') ? 'text-white' : 'text-gray-600'; ?>">Menu</a>
+                    <a href="<?= BASEURL ?>/menu" class="nav-link font-medium hover:text-primary transition <?php echo (isset($title) && $title === 'Home') ? 'text-white' : 'text-gray-600'; ?>">Menu</a>
                     <a href="<?= BASEURL ?>/contact" class="nav-link font-medium hover:text-primary transition <?php echo (isset($title) && $title === 'Home') ? 'text-white' : 'text-gray-600'; ?>">Kontak</a>
                     
                     <?php if(isset($_SESSION['user_id'])): 

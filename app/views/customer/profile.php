@@ -79,7 +79,7 @@
                         <div class="text-center py-12 text-gray-400">
                             <i class="fas fa-box-open text-5xl mb-4 text-gray-200"></i>
                             <p>Anda belum membuat pesanan apa pun.</p>
-                            <a href="<?= BASEURL ?>/#menu" class="text-primary hover:underline mt-2 inline-block font-semibold">Mulai jelajahi menu</a>
+                            <a href="<?= BASEURL ?>/menu" class="text-primary hover:underline mt-2 inline-block font-semibold">Mulai jelajahi menu</a>
                         </div>
                     <?php endif; ?>
                 </div>

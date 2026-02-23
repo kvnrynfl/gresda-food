@@ -17,7 +17,7 @@
                 <ul class="space-y-2">
                     <li><a href="<?= BASEURL ?>/" class="text-gray-400 hover:text-white transition"><i class="fas fa-chevron-right text-xs mr-2"></i>Beranda</a></li>
                     <li><a href="<?= BASEURL ?>/about" class="text-gray-400 hover:text-white transition"><i class="fas fa-chevron-right text-xs mr-2"></i>Tentang Kami</a></li>
-                    <li><a href="<?= BASEURL ?>/#menu" class="text-gray-400 hover:text-white transition"><i class="fas fa-chevron-right text-xs mr-2"></i>Menu Makanan</a></li>
+                    <li><a href="<?= BASEURL ?>/menu" class="text-gray-400 hover:text-white transition"><i class="fas fa-chevron-right text-xs mr-2"></i>Menu Makanan</a></li>
                 </ul>
             </div>
             
