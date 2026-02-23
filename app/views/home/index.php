@@ -32,13 +32,41 @@
 
 <!-- Features / About Section Summary -->
 <section id="about" class="py-24 bg-white relative">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 class="text-primary font-bold tracking-widest uppercase text-sm mb-2">Tentang Kami</h2>
-        <h3 class="text-4xl md:text-5xl font-extrabold text-secondary mb-6">Mengapa Memilih Gresda Food?</h3>
-        <p class="text-xl text-gray-600 max-w-3xl mx-auto mb-10">Kami hanya mengambil bahan-bahan segar dan daging sapi impor terbaik untuk memastikan setiap gigitan adalah pengalaman yang luar biasa. Dibuat dengan penuh renjana oleh koki ahli.</p>
-        <a href="<?= BASEURL ?>/about" class="inline-flex items-center gap-2 px-8 py-4 bg-primary text-white rounded-full font-bold text-lg hover:bg-cyan-700 transition transform shadow hover:scale-105">
-            Baca Kisah Lengkap Kami <i class="fas fa-arrow-right"></i>
-        </a>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col lg:flex-row gap-16 items-center">
+            <div class="lg:w-1/2 relative">
+                <div class="absolute -inset-4 bg-cyan-100 rounded-3xl transform -rotate-3 z-0"></div>
+                <img src="<?= BASEURL ?>/images/aesthetic/01.jpg" alt="Tentang Gresda Food" class="relative z-10 rounded-2xl shadow-xl w-full object-cover h-[450px]" onerror="this.src='https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80'">
+                <div class="absolute -bottom-6 -right-6 bg-white p-6 rounded-2xl shadow-xl z-20 flex items-center gap-4 hidden sm:flex">
+                    <div class="w-16 h-16 bg-primary text-white rounded-full flex items-center justify-center text-2xl font-bold">5+</div>
+                    <div>
+                        <p class="font-bold text-secondary">Tahun</p>
+                        <p class="text-sm text-gray-500">Pengalaman Kuliner</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lg:w-1/2 text-left mt-10 lg:mt-0">
+                <h2 class="text-primary font-bold tracking-widest uppercase text-sm mb-2">Tentang Kami</h2>
+                <h3 class="text-4xl md:text-5xl font-extrabold text-secondary mb-6 leading-tight">Pengalaman Bersantap tak Terlupakan</h3>
+                <p class="text-lg text-gray-600 mb-6 leading-relaxed">
+                    Lebih dari sekadar restoran, Gresda Food & Beverage adalah tempat di mana momen indah diciptakan. Sejak hari pertama, kami berkomitmen untuk menyajikan hidangan yang tidak hanya memuaskan lidah, tapi juga menghangatkan hati.
+                </p>
+                <div class="space-y-4 mb-10">
+                    <div class="flex items-start gap-4">
+                        <i class="fas fa-check-circle text-primary text-xl mt-1"></i>
+                        <p class="text-gray-700"><strong>Bahan Baku Pilihan:</strong> Kami secara ketat menyeleksi daging sapi impor terbaik dan sayuran organik segar setiap harinya.</p>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <i class="fas fa-check-circle text-primary text-xl mt-1"></i>
+                        <p class="text-gray-700"><strong>Koki Berpengalaman:</strong> Dikerjakan oleh tenaga profesional yang menaruh nyawa pada setiap hidangan.</p>
+                    </div>
+                </div>
+                <a href="<?= BASEURL ?>/about" class="inline-flex items-center gap-2 px-8 py-4 bg-primary text-white rounded-full font-bold text-lg hover:bg-cyan-700 transition transform shadow hover:scale-105">
+                    Kenali Kami Lebih Dekat <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
     </div>
 </section>
 
