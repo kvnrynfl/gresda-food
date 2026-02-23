@@ -128,6 +128,7 @@ class AuthController extends Controller {
 
         $_SESSION['admin_id'] = $admin['id'];
         $_SESSION['admin_username'] = $admin['username'];
+        $_SESSION['admin_fullname'] = $admin['full_name'] ?? $admin['username'];
         $_SESSION['role'] = 'admin';
 
         $this->redirect('/admin/dashboard'); // Redirect to Admin Dashboard

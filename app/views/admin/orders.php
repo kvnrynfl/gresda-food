@@ -65,7 +65,7 @@ include '../app/views/layouts/admin_header.php';
                             </div>
                         </td>
                         <td class="px-6 py-4 text-center">
-                            <?php if ($order['status'] !== 'Finished' && $order['status'] !== 'Canceled'): ?>
+                            <?php if ($order['status'] !== 'Finished' && $order['status'] !== 'Canceled' && $order['status'] !== 'Cart'): ?>
                             <form action="<?= BASEURL ?>/admin/updateOrderStatus/<?= urlencode($order['order_id']) ?>" method="POST" class="flex gap-2 justify-center">
                                 <?= CSRF::getTokenField() ?>
                                 <select name="status" class="text-sm border border-gray-300 rounded-lg px-2 py-1 outline-none focus:ring-1 focus:ring-primary focus:border-primary">
