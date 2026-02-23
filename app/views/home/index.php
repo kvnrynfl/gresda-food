@@ -1,7 +1,7 @@
 <?php include '../app/views/layouts/header.php'; ?>
 
 <!-- Hero Section -->
-<section class="relative bg-secondary text-white min-h-[85vh] flex items-center pt-16">
+<section class="relative bg-secondary text-white min-h-screen flex items-center justify-center pt-16">
     <!-- Dynamic Background Image Container -->
     <div id="hero-bg-container" class="absolute inset-0 z-0 overflow-hidden">
         <!-- JS will inject layers here -->
@@ -10,8 +10,8 @@
     <div class="absolute inset-0 z-10 bg-black/60 flex"></div>
     
     <div class="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center w-full">
-        <div class="bg-black/50 backdrop-blur-sm p-10 md:p-14 rounded-3xl shadow-2xl flex flex-col items-center max-w-4xl border border-white/10">
-            <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 drop-shadow-xl animate-fade-in-up">
+        <div class="flex flex-col items-center max-w-4xl">
+            <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] animate-fade-in-up">
                 Pengalaman <span class="text-primary italic">Rasa Premium</span> 
                 <br>Keunggulan Kuliner
             </h1>
