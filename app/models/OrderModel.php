@@ -93,4 +93,25 @@ class OrderModel extends Database {
         $this->bind(':order_id', $order_id);
         return $this->execute();
     }
+
+    public function getAllPayments() {
+        $this->query("SELECT * FROM tbl_payment");
+        return $this->resultSet();
+    }
+
+    public function saveConfirmOrder($data) {
+        $id = UUID::v4();
+        $this->query("INSERT INTO tbl_confirmorder (id, order_id, user_id, payment, rekening_name, image_name, alamat, tgl_pay) VALUES (:id, :order_id, :user_id, :payment, :rekening_name, :image_name, :alamat, :tgl_pay)");
+        
+        $this->bind(':id', $id);
+        $this->bind(':order_id', $data['order_id']);
+        $this->bind(':user_id', $data['user_id']);
+        $this->bind(':payment', $data['payment']);
+        $this->bind(':rekening_name', $data['rekening_name']);
+        $this->bind(':image_name', $data['image_name']);
+        $this->bind(':alamat', $data['alamat']);
+        $this->bind(':tgl_pay', $data['tgl_pay']);
+        
+        return $this->execute();
+    }
 }
