@@ -13,7 +13,7 @@ class App {
             $this->controller = ucfirst($url[0]) . 'Controller';
             unset($url[0]);
         }
-        var_dump($url);
+
         require_once '../app/controllers/' . $this->controller . '.php';
         $this->controller = new $this->controller;
 
