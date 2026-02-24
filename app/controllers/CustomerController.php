@@ -53,7 +53,8 @@ class CustomerController extends Controller {
             // Should check if item exists and update qty, for now just simple add
             $orderModel->addDetailItem($activeCart['order_id'], $foodId, 1);
             
-            $this->redirect('/customer/cart');
+            $_SESSION['flash_success'] = "Berhasil masuk keranjang!";
+            $this->redirect('/menu');
         }
     }
 

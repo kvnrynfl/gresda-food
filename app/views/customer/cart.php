@@ -49,7 +49,6 @@
                                         </div>
                                         <div>
                                             <h4 class="font-bold text-gray-800 text-lg"><?= htmlspecialchars($item['name']) ?></h4>
-                                            <p class="text-sm text-gray-500 line-clamp-1">Item reference.</p>
                                         </div>
                                     </div>
                                     <div class="col-span-1 sm:col-span-2 flex justify-between sm:justify-center items-center">
