@@ -4,7 +4,7 @@ class AdminController extends Controller {
 
     public function __construct() {
         if (!isset($_SESSION['admin_id']) || $_SESSION['role'] !== 'admin') {
-            $this->redirect('/auth/adminLogin');
+            $this->redirect('/auth/login');
         }
     }
 

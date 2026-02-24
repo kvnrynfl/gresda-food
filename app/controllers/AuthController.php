@@ -2,10 +2,6 @@
 
 class AuthController extends Controller {
 
-    public function admin() {
-        $this->adminLogin();
-    }
-
     public function login() {
         if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             $data = ['login_id' => '', 'error' => ''];
@@ -77,10 +73,7 @@ class AuthController extends Controller {
         }
     }
 
-    public function adminLogin() {
-        // Deprecated, redirect to normal login
-        $this->redirect('/auth/login');
-    }
+
 
     public function logout() {
         session_unset();
