@@ -3,13 +3,13 @@
 <div class="bg-gray-50 min-h-screen py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <div class="flex items-center gap-3 mb-8 text-sm text-gray-500 font-medium">
-            <a href="<?= BASEURL ?>/" class="hover:text-primary transition"><i class="fas fa-home"></i> Beranda</a>
-            <i class="fas fa-chevron-right text-xs"></i>
-            <span class="text-gray-900">Keranjang Belanja</span>
+        <!-- Standardized Header -->
+        <div class="flex items-center gap-4 mb-8">
+            <a href="<?= BASEURL ?>/menu" class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-gray-600 shadow-sm border border-gray-200 hover:bg-gray-50 transition">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <h1 class="text-3xl font-bold text-gray-900">Keranjang Belanja</h1>
         </div>
-
-        <h2 class="text-3xl font-extrabold text-secondary mb-8">Keranjang Anda</h2>
 
         <form id="checkout-form" action="<?= BASEURL ?>/customer/checkoutSelected" method="POST" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <?= CSRF::getTokenField() ?>

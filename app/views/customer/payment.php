@@ -1,7 +1,7 @@
 <?php include '../app/views/layouts/header.php'; ?>
 
 <div class="bg-gray-50 min-h-screen py-10">
-    <div class="container mx-auto px-4 max-w-3xl">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div class="flex items-center gap-4 mb-8">
             <a href="<?= BASEURL ?>/customer/orders" class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-gray-600 shadow-sm border border-gray-200 hover:bg-gray-50 transition">

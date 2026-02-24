@@ -1,10 +1,18 @@
 <?php include '../app/views/layouts/header.php'; ?>
 
-<div class="bg-gray-100 min-h-screen py-12">
+<div class="bg-gray-50 min-h-screen py-10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
+        <!-- Standardized Header -->
+        <div class="flex items-center gap-4 mb-8">
+            <a href="<?= BASEURL ?>/" class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-gray-600 shadow-sm border border-gray-200 hover:bg-gray-50 transition">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <h1 class="text-3xl font-bold text-gray-900">Profil Akun</h1>
+        </div>
+
         <!-- Welcome Banner -->
-        <div class="bg-white rounded-2xl shadow-sm overflow-hidden mb-8 mt-8">
+        <div class="bg-white rounded-2xl shadow-sm overflow-hidden mb-8">
             <div class="bg-gradient-to-r from-cyan-600 to-blue-800 h-40 relative flex items-center px-8 sm:px-32">
                 <h1 class="text-white text-2xl font-bold opacity-90 tracking-wide"><i class="fas fa-user mr-2"></i> Profil Akun</h1>
                 <div class="absolute -bottom-12 left-8">

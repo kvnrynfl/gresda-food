@@ -3,13 +3,13 @@
 <div class="bg-gray-50 min-h-screen py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <div class="flex items-center gap-3 mb-8 text-sm text-gray-500 font-medium">
-            <a href="<?= BASEURL ?>/customer/cart" class="hover:text-primary transition"><i class="fas fa-shopping-cart"></i> Keranjang</a>
-            <i class="fas fa-chevron-right text-xs"></i>
-            <span class="text-gray-900">Pembayaran</span>
+        <!-- Standardized Header -->
+        <div class="flex items-center gap-4 mb-8">
+            <a href="<?= BASEURL ?>/customer/cart" class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-gray-600 shadow-sm border border-gray-200 hover:bg-gray-50 transition">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <h1 class="text-3xl font-bold text-gray-900">Selesaikan Pembayaran</h1>
         </div>
-
-        <h2 class="text-3xl font-extrabold text-secondary mb-8">Selesaikan Pembayaran</h2>
 
         <form id="checkout-form" action="<?= BASEURL ?>/customer/processCheckout" method="POST" enctype="multipart/form-data" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <?= CSRF::getTokenField() ?>
@@ -149,8 +149,13 @@ document.addEventListener('DOMContentLoaded', function() {
                         <i class="fas fa-shopping-bag"></i> Buat Pesanan Sekarang
                     </button>
                     
-                    <div class="mt-6 text-xs text-gray-400 text-center leading-relaxed">
-                        Dengan menyelesaikan pesanan ini, Anda menyetujui <a href="#" class="text-primary hover:underline">Ketentuan Layanan</a> dan <a href="#" class="text-primary hover:underline">Kebijakan Privasi</a> kami.
+                    <div class="mt-6 flex items-start">
+                        <div class="flex items-center h-5">
+                            <input id="terms_checkout" name="terms_checkout" type="checkbox" required class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary accent-primary">
+                        </div>
+                        <label for="terms_checkout" class="ml-2 text-xs text-gray-500 leading-relaxed">
+                            Dengan mencentang kotak ini, saya menyetujui <a href="<?= BASEURL ?>/legal/terms" target="_blank" class="text-primary hover:underline">Ketentuan Layanan</a> dan <a href="<?= BASEURL ?>/legal/privacy" target="_blank" class="text-primary hover:underline">Kebijakan Privasi</a> Gresda Food.
+                        </label>
                     </div>
                 </div>
             </div>
