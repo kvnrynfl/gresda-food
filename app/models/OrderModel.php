@@ -6,7 +6,7 @@ class OrderModel extends Database {
         parent::__construct();
     }
 
-    public function getAllCart() {
+    public function getAllOrders() {
         // Admin gets all orders
         $this->query("SELECT o.*, u.username, u.email FROM tbl_orders o LEFT JOIN tbl_users u ON o.user_id = u.id ORDER BY o.created_at DESC");
         return $this->resultSet();

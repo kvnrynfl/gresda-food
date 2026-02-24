@@ -18,7 +18,7 @@ class AdminController extends Controller {
         $userModel = $this->model('UserModel');
         $orderModel = $this->model('OrderModel');
         
-        $active_orders_count = count(array_filter($orderModel->getAllCart(), function($order) {
+        $active_orders_count = count(array_filter($orderModel->getAllOrders(), function($order) {
             return !in_array($order['status'], ['Finished', 'Canceled', 'Cart']);
         }));
 
@@ -101,7 +101,7 @@ class AdminController extends Controller {
 
     // Orders
     public function orders() {
-        $data['orders'] = $this->model('OrderModel')->getAllCart();
+        $data['orders'] = $this->model('OrderModel')->getAllOrders();
         $this->view('admin/orders', $data);
     }
     
@@ -127,8 +127,7 @@ class AdminController extends Controller {
     
     public function deleteUser($id) {
         if ($_SERVER['REQUEST_METHOD'] == 'POST' && CSRF::verifyToken($_POST['csrf_token'] ?? '')) {
-            // Need delete method in UserModel
-            // $this->model('UserModel')->delete($id);
+            $this->model('UserModel')->delete($id);
             $this->redirect('/admin/users');
         }
     }
@@ -154,23 +153,15 @@ class AdminController extends Controller {
     public function editAdmin($id) {
         if ($_SERVER['REQUEST_METHOD'] == 'POST' && CSRF::verifyToken($_POST['csrf_token'] ?? '')) {
             $postData = Sanitize::array($_POST);
-            // Reusing update profile style logic but mapping directly to DB params - we need updateAdmin method
-            // Fast workaround for this missing update profile method in admin model
-            $db = new Database();
-            $db->query("UPDATE tbl_users SET full_name = :full_name, username = :username WHERE id = :id AND role = 'admin'");
-            $db->bind(':full_name', $postData['full_name']);
-            $db->bind(':username', $postData['username']);
-            $db->bind(':id', $id);
-            $db->execute();
+            
+            $this->model('AdminModel')->updateProfile($id, $postData);
             
             // If logged in admin edits own profile, update session
-            if ($id == $_SESSION['admin_id']) $_SESSION['username'] = $postData['username'];
+            if ($id == $_SESSION['admin_id']) $_SESSION['admin_fullname'] = $postData['full_name'];
+            if ($id == $_SESSION['admin_id']) $_SESSION['admin_username'] = $postData['username'];
             $this->redirect('/admin/admins');
         }
-        $db = new Database();
-        $db->query("SELECT * FROM tbl_users WHERE id = :id AND role = 'admin'");
-        $db->bind(':id', $id);
-        $data['admin'] = $db->single();
+        $data['admin'] = $this->model('AdminModel')->getById($id);
         $this->view('admin/admin_edit', $data);
     }
     
@@ -183,17 +174,13 @@ class AdminController extends Controller {
             }
             $this->redirect('/admin/admins');
         }
-        $db = new Database();
-        $db->query("SELECT * FROM tbl_users WHERE id = :id AND role = 'admin'");
-        $db->bind(':id', $id);
-        $data['admin'] = $db->single();
+        $data['admin'] = $this->model('AdminModel')->getById($id);
         $this->view('admin/admin_password', $data);
     }
 
     public function deleteAdmin($id) {
         if ($_SERVER['REQUEST_METHOD'] == 'POST' && CSRF::verifyToken($_POST['csrf_token'] ?? '')) {
-            // Need delete method in AdminModel
-            // $this->model('AdminModel')->delete($id);
+            $this->model('AdminModel')->delete($id);
             $this->redirect('/admin/admins');
         }
     }

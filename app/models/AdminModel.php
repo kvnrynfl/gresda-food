@@ -30,6 +30,20 @@ class AdminModel extends Database {
         return $this->execute();
     }
     
+    public function updateProfile($id, $data) {
+        $this->query("UPDATE tbl_users SET full_name = :full_name, username = :username WHERE id = :id AND role = 'admin'");
+        $this->bind(':full_name', $data['full_name']);
+        $this->bind(':username', $data['username']);
+        $this->bind(':id', $id);
+        return $this->execute();
+    }
+
+    public function getById($id) {
+        $this->query("SELECT * FROM tbl_users WHERE id = :id AND role = 'admin'");
+        $this->bind(':id', $id);
+        return $this->single();
+    }
+
     public function getAll() {
         $this->query("SELECT * FROM tbl_users WHERE role = 'admin' ORDER BY id ASC");
         return $this->resultSet();
