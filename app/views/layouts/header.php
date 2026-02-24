@@ -81,12 +81,23 @@
                     
                     <?php if(isset($_SESSION['role'])): 
                         $globalCartCount = 0;
+                        $hasPendingPayment = false;
                         if($_SESSION['role'] === 'customer') {
                             require_once __DIR__ . '/../../models/OrderModel.php';
                             if(class_exists('OrderModel')) {
                                 $om = new OrderModel();
                                 $globalItems = $om->getCartItemsByUser($_SESSION['user_id']);
                                 $globalCartCount = count($globalItems);
+                                
+                                $userOrders = $om->getOrdersByUser($_SESSION['user_id']);
+                                if(!empty($userOrders)){
+                                    foreach($userOrders as $o) {
+                                        if($o['status'] === 'Payment') {
+                                            $hasPendingPayment = true;
+                                            break;
+                                        }
+                                    }
+                                }
                             }
                         }
                     ?>
@@ -100,8 +111,13 @@
                         <?php endif; ?>
                         
                         <div class="relative group <?php echo ($_SESSION['role'] === 'customer') ? 'ml-4' : ''; ?>">
-                            <button class="flex items-center gap-2 nav-link font-medium hover:text-primary transition <?php echo (isset($title) && $title === 'Home') ? 'text-white' : 'text-gray-600'; ?>">
-                                <i class="fas fa-user-circle text-xl"></i>
+                            <button class="flex items-center gap-2 nav-link font-medium hover:text-primary transition relative <?php echo (isset($title) && $title === 'Home') ? 'text-white' : 'text-gray-600'; ?>">
+                                <div class="relative inline-block">
+                                    <i class="fas fa-user-circle text-xl"></i>
+                                    <?php if(isset($hasPendingPayment) && $hasPendingPayment): ?>
+                                        <span class="absolute top-0 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border border-white"></span>
+                                    <?php endif; ?>
+                                </div>
                                 <?= $_SESSION['username'] ?? $_SESSION['admin_username'] ?>
                             </button>
                             <div class="absolute right-0 w-64 mt-2 bg-white border border-gray-100 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top-right scale-95 group-hover:scale-100 z-50">
@@ -115,7 +131,14 @@
                                     <?php else: ?>
                                     <a href="<?= BASEURL ?>/customer/profile" class="block px-5 py-2.5 text-sm text-gray-700 hover:bg-cyan-50 hover:text-primary transition flex items-center gap-3"><i class="fas fa-user-circle text-gray-400 w-4 text-center"></i> Profil Saya</a>
                                     <a href="<?= BASEURL ?>/customer/editProfile" class="block px-5 py-2.5 text-sm text-gray-700 hover:bg-cyan-50 hover:text-primary transition flex items-center gap-3"><i class="fas fa-cog text-gray-400 w-4 text-center"></i> Pengaturan Akun</a>
-                                    <a href="<?= BASEURL ?>/customer/orders" class="block px-5 py-2.5 text-sm text-gray-700 hover:bg-cyan-50 hover:text-primary transition flex items-center gap-3"><i class="fas fa-history text-gray-400 w-4 text-center"></i> Riwayat Transaksi</a>
+                                    <a href="<?= BASEURL ?>/customer/orders" class="block px-5 py-2.5 text-sm text-gray-700 hover:bg-cyan-50 hover:text-primary transition flex items-center justify-between">
+                                        <div class="flex items-center gap-3">
+                                            <i class="fas fa-history text-gray-400 w-4 text-center"></i> Riwayat Transaksi
+                                        </div>
+                                        <?php if(isset($hasPendingPayment) && $hasPendingPayment): ?>
+                                            <span class="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm animate-pulse">!</span>
+                                        <?php endif; ?>
+                                    </a>
                                     <?php endif; ?>
                                 </div>
                                 <div class="border-t border-gray-100"></div>

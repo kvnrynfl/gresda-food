@@ -134,4 +134,18 @@ class OrderModel extends Database {
         
         return $this->execute();
     }
+
+    public function updateConfirmOrderImage($order_id, $image_name, $tgl_pay) {
+        $this->query("UPDATE tbl_confirmorder SET image_name = :image_name, tgl_pay = :tgl_pay WHERE order_id = :order_id");
+        $this->bind(':image_name', $image_name);
+        $this->bind(':tgl_pay', $tgl_pay);
+        $this->bind(':order_id', $order_id);
+        return $this->execute();
+    }
+
+    public function getConfirmOrder($order_id) {
+        $this->query("SELECT * FROM tbl_confirmorder WHERE order_id = :order_id");
+        $this->bind(':order_id', $order_id);
+        return $this->single();
+    }
 }

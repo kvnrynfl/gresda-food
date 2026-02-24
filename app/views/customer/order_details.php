@@ -121,8 +121,51 @@
                     <span class="text-3xl font-extrabold text-primary">Rp <?= number_format(($totalPrice * 1.1) + 15000, 0, ',', '.') ?></span>
                 </div>
             </div>
+            </div>
             <?php endif; ?>
             
+            <?php if(isset($confirm) && !empty($confirm['image_name'])): ?>
+            <div class="bg-gray-50 p-8 border-t border-gray-100">
+                <h3 class="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                    <i class="fas fa-file-invoice-dollar text-primary"></i> Bukti Pembayaran
+                </h3>
+                <div class="flex flex-col sm:flex-row gap-8 items-start">
+                    <div class="w-full sm:w-1/2 bg-white p-2 rounded-2xl border border-gray-200 shadow-sm">
+                        <img src="<?= BASEURL ?>/images/confirm/<?= htmlspecialchars($confirm['image_name']) ?>" alt="Bukti Pembayaran" class="w-full h-auto rounded-xl max-h-96 object-contain bg-gray-50" onerror="this.src='https://via.placeholder.com/400x300?text=Gambar+Tidak+Ditemukan'">
+                    </div>
+                    <div class="w-full sm:w-1/2 space-y-4">
+                        <div>
+                            <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Metode Pembayaran</p>
+                            <p class="text-base font-semibold text-gray-800"><?= htmlspecialchars($confirm['payment'] ?? 'Transfer Bank') ?></p>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Atas Nama Rekening</p>
+                            <p class="text-base font-semibold text-gray-800"><?= htmlspecialchars($confirm['rekening_name'] ?? '-') ?></p>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Tanggal Upload</p>
+                            <p class="text-base font-semibold text-gray-800">
+                                <?= !empty($confirm['tgl_pay']) && $confirm['tgl_pay'] !== '0000-00-00' ? date('d F Y', strtotime($confirm['tgl_pay'])) : 'Belum Diverifikasi' ?>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <?php elseif(isset($order) && $order['status'] === 'Payment'): ?>
+            <div class="bg-red-50 p-8 border-t border-red-100 text-center">
+                <div class="w-16 h-16 bg-red-100 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-exclamation-triangle text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-red-800 mb-2">Menunggu Bukti Pembayaran</h3>
+                <p class="text-red-600 mb-6 max-w-md mx-auto">Kami belum menerima bukti pembayaran untuk pesanan ini. Pesanan tidak akan diproses hingga pembayaran dikonfirmasi.</p>
+                <a href="<?= BASEURL ?>/customer/payment/<?= urlencode($order_id) ?>" class="inline-block px-8 py-3 bg-red-600 text-white rounded-xl font-bold shadow-lg shadow-red-500/30 hover:bg-red-700 transition relative">
+                    <span class="absolute -top-1 -right-1 w-3 h-3 bg-red-400 rounded-full animate-ping"></span>
+                    <span class="absolute -top-1 -right-1 w-3 h-3 bg-red-600 border-2 border-white rounded-full"></span>
+                    <i class="fas fa-wallet mr-2"></i> Bayar Sekarang
+                </a>
+            </div>
+            <?php endif; ?>
+
         </div>
     </div>
 </div>

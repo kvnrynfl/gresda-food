@@ -64,10 +64,18 @@ include '../app/views/layouts/header.php';
                             <p class="text-sm text-gray-500 font-medium mb-1">Total Pembayaran</p>
                             <p class="text-3xl font-black text-gray-800">Rp <?= number_format($order['total'] ?? 0, 0, ',', '.') ?></p>
                         </div>
-                        
-                        <a href="<?= BASEURL ?>/customer/orderDetails/<?= urlencode($order['order_id']) ?>" class="w-full md:w-auto px-8 py-3.5 bg-white border-2 border-primary text-primary text-sm font-bold rounded-xl hover:bg-primary hover:text-white transition-all shadow-sm hover:shadow active:scale-95 flex items-center justify-center gap-2">
-                            Lihat Detail Pesanan <i class="fas fa-arrow-right"></i>
-                        </a>
+                        <div class="w-full md:w-auto flex flex-col sm:flex-row gap-3">
+                            <?php if($order['status'] === 'Payment'): ?>
+                            <a href="<?= BASEURL ?>/customer/payment/<?= urlencode($order['order_id']) ?>" class="w-full sm:w-auto px-8 py-3.5 bg-red-500 border-2 border-red-500 text-white text-sm font-bold rounded-xl hover:bg-red-600 hover:border-red-600 transition-all shadow-lg shadow-red-500/30 active:scale-95 flex items-center justify-center gap-2 relative">
+                                <span class="absolute -top-1 -right-1 w-3 h-3 bg-red-400 rounded-full animate-ping"></span>
+                                <span class="absolute -top-1 -right-1 w-3 h-3 bg-red-600 border-2 border-white rounded-full"></span>
+                                <i class="fas fa-wallet"></i> Bayar Sekarang
+                            </a>
+                            <?php endif; ?>
+                            <a href="<?= BASEURL ?>/customer/orderDetails/<?= urlencode($order['order_id']) ?>" class="w-full sm:w-auto px-8 py-3.5 bg-white border-2 border-primary text-primary text-sm font-bold rounded-xl hover:bg-primary hover:text-white transition-all shadow-sm hover:shadow active:scale-95 flex items-center justify-center gap-2">
+                                Detail
+                            </a>
+                        </div>
                     </div>
                 </div>
             <?php endforeach; else: ?>

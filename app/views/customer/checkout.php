@@ -52,32 +52,9 @@
                     </div>
 
                     <div class="bg-gray-50 rounded-lg p-6 border border-gray-200 mb-6">
-                        <p class="text-sm tracking-wide text-gray-600 mb-2">Silakan transfer persis ke:</p>
+                        <p class="text-sm tracking-wide text-gray-600 mb-2">Silakan transfer ke nomor rekening berikut setelah pesanan dibuat:</p>
                         <p class="text-xl font-mono font-bold text-gray-900 tracking-wider">1234 5678 9012 3456</p>
                         <p class="text-sm font-semibold text-gray-500">A/N Gresda Food & Beverage</p>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Unggah Bukti Pembayaran (Struk)</label>
-                        <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:bg-gray-50 transition relative group" id="upload-container">
-                            <div class="space-y-1 text-center" id="upload-content">
-                                <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 group-hover:text-primary transition mb-3"></i>
-                                <div class="flex text-sm text-gray-600 justify-center">
-                                    <label for="payment_proof" class="relative cursor-pointer bg-white rounded-md font-medium text-primary hover:text-cyan-500 focus-within:outline-none">
-                                        <span>Unggah file</span>
-                                        <input id="payment_proof" name="payment_proof" type="file" class="sr-only" accept="image/jpeg, image/png, image/jpg" onchange="previewImage(this);" required>
-                                    </label>
-                                    <p class="pl-1">atau seret dan lepas</p>
-                                </div>
-                                <p class="text-xs text-gray-500">
-                                    PNG, JPG, GIF hingga 5MB
-                                </p>
-                            </div>
-                            <div id="image-preview-container" class="hidden w-full flex-col items-center">
-                                <img id="image-preview" src="#" alt="Preview" class="max-h-48 rounded-md mb-4 object-contain shadow-sm border border-gray-200">
-                                <button type="button" onclick="removeImage();" class="text-sm text-red-500 hover:text-red-700 font-semibold px-4 py-2 bg-red-50 rounded-lg transition"><i class="fas fa-trash-alt mr-2"></i> Hapus Gambar</button>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -145,8 +122,8 @@
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 sticky top-24">
                     <h3 class="text-xl font-bold text-gray-800 mb-6 border-b border-gray-100 pb-4">Konfirmasi Akhir</h3>
                     
-                    <button type="button" onclick="confirmCheckout();" class="w-full flex justify-center items-center py-4 bg-green-600 text-white rounded-xl font-bold text-lg hover:bg-green-700 transition shadow-lg gap-2 shadow-green-500/30">
-                        <i class="fas fa-check-circle"></i> Selesaikan Pembayaran
+                    <button type="button" onclick="confirmCheckout();" class="w-full flex justify-center items-center py-4 bg-primary text-white rounded-xl font-bold text-lg hover:bg-cyan-700 transition shadow-lg gap-2 shadow-cyan-500/30">
+                        <i class="fas fa-shopping-bag"></i> Buat Pesanan Sekarang
                     </button>
                     
                     <div class="mt-6 text-xs text-gray-400 text-center leading-relaxed">
@@ -160,29 +137,6 @@
 </div>
 
 <script>
-function previewImage(input) {
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
-        reader.onload = function(e) {
-            document.getElementById('upload-content').classList.add('hidden');
-            var container = document.getElementById('image-preview-container');
-            container.classList.remove('hidden');
-            container.classList.add('flex');
-            document.getElementById('image-preview').src = e.target.result;
-        }
-        reader.readAsDataURL(input.files[0]);
-    }
-}
-
-function removeImage() {
-    document.getElementById('payment_proof').value = "";
-    document.getElementById('image-preview').src = "#";
-    var container = document.getElementById('image-preview-container');
-    container.classList.add('hidden');
-    container.classList.remove('flex');
-    document.getElementById('upload-content').classList.remove('hidden');
-}
-
 function confirmCheckout() {
     var form = document.getElementById('checkout-form');
     if (!form.checkValidity()) {
@@ -191,13 +145,13 @@ function confirmCheckout() {
     }
     
     Swal.fire({
-        title: 'Selesaikan Pembayaran?',
-        text: "Pastikan bukti transfer dan data yang dimasukkan sudah benar.",
+        title: 'Buat Pesanan?',
+        text: "Pesanan akan dibuat dan Anda dapat melakukan pembayaran setelahnya.",
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#06b6d4',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Ya, Selesaikan',
+        confirmButtonText: 'Ya, Buat Pesanan',
         cancelButtonText: 'Batal'
     }).then((result) => {
         if (result.isConfirmed) {

@@ -155,39 +155,22 @@ class CustomerController extends Controller {
                 $orderModel->removeCartItem($item['detail_id']);
             }
 
-            // Handle file upload for payment proof
-            $image_name = '';
-            if (isset($_FILES['payment_proof']) && $_FILES['payment_proof']['error'] == 0) {
-                $upload = Upload::image($_FILES['payment_proof'], '../public/images/confirm');
-                if ($upload['status']) {
-                    $image_name = $upload['filename'];
-                } else {
-                    $_SESSION['flash_error'] = "Gagal mengunggah bukti pembayaran: " . $upload['message'];
-                    $this->redirect('/customer/checkout');
-                    return;
-                }
-            } else {
-                $_SESSION['flash_error'] = "Bukti pembayaran wajib diunggah.";
-                $this->redirect('/customer/checkout');
-                return;
-            }
-
-            // Add to tbl_confirmorder
+            // Add to tbl_confirmorder (Image will be uploaded later in payment flow)
             $confirmData = [
                 'order_id' => $orderId,
                 'user_id' => $_SESSION['user_id'],
                 'payment' => Sanitize::string($_POST['payment_method']),
                 'rekening_name' => Sanitize::string($_POST['rekening_name']),
-                'image_name' => $image_name,
+                'image_name' => '', // Empty until they upload proof
                 'alamat' => Sanitize::string($_POST['address']),
-                'tgl_pay' => date('Y-m-d') 
+                'tgl_pay' => date('Y-m-d') // Will update this accurately when they upload
             ];
             $orderModel->saveConfirmOrder($confirmData);
             
             // clear session selection
             unset($_SESSION['checkout_items']);
 
-            $_SESSION['flash_success'] = "Pembayaran berhasil dikonfirmasi. Pesanan sedang diproses.";
+            $_SESSION['flash_success'] = "Pesanan berhasil dibuat. Silakan unggah bukti pembayaran Anda.";
             
             $this->redirect('/customer/orders');
         }
@@ -219,8 +202,84 @@ class CustomerController extends Controller {
 
         $data['order'] = $activeOrder;
         $data['details'] = $orderModel->getOrderDetails($id);
+        $data['confirm'] = $orderModel->getConfirmOrder($id);
         $data['order_id'] = $id;
         $this->view('customer/order_details', $data);
+    }
+
+    public function payment($id) {
+        $orderModel = $this->model('OrderModel');
+        
+        // Security check: Verify order belongs to this user
+        $userOrders = $orderModel->getOrdersByUser($_SESSION['user_id']);
+        $isOwner = false;
+        $activeOrder = null;
+        foreach($userOrders as $order) {
+            if($order['order_id'] == $id) {
+                $isOwner = true;
+                $activeOrder = $order;
+                break;
+            }
+        }
+        
+        if(!$isOwner || $activeOrder['status'] !== 'Payment') {
+            $this->redirect('/customer/orders');
+            return;
+        }
+
+        $data['order'] = $activeOrder;
+        $data['order_id'] = $id;
+        $this->view('customer/payment', $data);
+    }
+
+    public function processPayment() {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && CSRF::verifyToken($_POST['csrf_token'] ?? '')) {
+            $orderId = $_POST['order_id'] ?? '';
+            
+            if (empty($orderId)) {
+                $this->redirect('/customer/orders');
+                return;
+            }
+
+            // Verify Ownership
+            $orderModel = $this->model('OrderModel');
+            $userOrders = $orderModel->getOrdersByUser($_SESSION['user_id']);
+            $isOwner = false;
+            foreach($userOrders as $order) {
+                if($order['order_id'] == $orderId) {
+                    $isOwner = true;
+                    break;
+                }
+            }
+            
+            if(!$isOwner) {
+                $this->redirect('/customer/orders');
+                return;
+            }
+
+            // Handle file upload for payment proof
+            if (isset($_FILES['payment_proof']) && $_FILES['payment_proof']['error'] == 0) {
+                $upload = Upload::image($_FILES['payment_proof'], '../public/images/confirm');
+                if ($upload['status']) {
+                    $image_name = $upload['filename'];
+                    
+                    // Update tbl_confirmorder
+                    $orderModel->updateConfirmOrderImage($orderId, $image_name, date('Y-m-d'));
+                    
+                    $_SESSION['flash_success'] = "Bukti pembayaran berhasil diunggah. Kami akan segera memverifikasinya.";
+                } else {
+                    $_SESSION['flash_error'] = "Gagal mengunggah bukti pembayaran: " . $upload['message'];
+                    $this->redirect('/customer/payment/' . $orderId);
+                    return;
+                }
+            } else {
+                $_SESSION['flash_error'] = "Bukti pembayaran wajib diunggah.";
+                $this->redirect('/customer/payment/' . $orderId);
+                return;
+            }
+
+            $this->redirect('/customer/orderDetails/' . urlencode($orderId));
+        }
     }
 
     public function changePassword() {
