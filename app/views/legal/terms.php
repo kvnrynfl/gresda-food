@@ -5,16 +5,38 @@ ob_start();
 ?>
 
 <!-- Header -->
-<div class="bg-gradient-to-r from-cyan-600 to-cyan-500 px-10 py-12 text-center border-b border-gray-100">
-    <h1 class="text-4xl font-extrabold text-white mb-4">Syarat & Ketentuan Layanan</h1>
-    <p class="text-cyan-50 text-lg">Diperbarui: 24 Februari 2026</p>
+<div class="relative bg-secondary text-white pt-20 pb-16 overflow-hidden">
+    <!-- Decorative background blobs -->
+    <div class="absolute top-0 left-0 w-full h-full overflow-hidden opacity-20 pointer-events-none">
+        <div class="absolute -top-[20%] -right-[10%] w-[50%] h-[150%] bg-gradient-to-b from-primary to-transparent rounded-full blur-3xl transform rotate-45"></div>
+        <div class="absolute top-[40%] -left-[20%] w-[60%] h-[100%] bg-gradient-to-t from-cyan-600 to-transparent rounded-full blur-3xl transform -rotate-12"></div>
+    </div>
+    
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center animate-fade-in-up z-10">
+        <h1 class="text-4xl md:text-5xl font-extrabold mb-4">Syarat & Ketentuan Layanan</h1>
+        <p class="text-gray-300 text-lg max-w-2xl mx-auto">Diperbarui: 24 Februari 2026</p>
+    </div>
 </div>
 
 <!-- Content -->
-<div class="p-10 md:p-14 prose prose-cyan max-w-none text-gray-700 leading-relaxed">
-    <p class="text-lg font-medium mb-8 text-gray-800">Selamat datang di Gresda Food! Dengan mendaftar, mengakses, atau menggunakan layanan platform kami, Anda menyetujui untuk terikat oleh Syarat dan Ketentuan berikut.</p>
-    
-    <h3 class="text-2xl font-bold text-gray-900 mt-10 mb-4 flex items-center gap-3">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14 flex flex-col md:flex-row gap-12">
+    <!-- Table of Contents Sidebar -->
+    <div class="md:w-1/4 hidden md:block">
+        <div class="sticky top-24 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+            <h4 class="text-lg font-bold text-gray-900 mb-4 border-b border-gray-100 pb-3">Daftar Isi</h4>
+            <ul class="space-y-3 text-sm font-medium text-gray-500">
+                <li><a href="#pendaftaran-akun" class="hover:text-primary transition">1. Pendaftaran & Akun</a></li>
+                <li><a href="#pemesanan-pembayaran" class="hover:text-primary transition">2. Pemesanan & Pembayaran</a></li>
+                <li><a href="#pengiriman" class="hover:text-primary transition">3. Pengiriman</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Main Content Terms -->
+    <div class="md:w-3/4 prose prose-cyan max-w-none text-gray-700 leading-relaxed bg-white p-8 sm:p-12 rounded-3xl shadow-sm border border-gray-50">
+        <p class="text-lg font-medium mb-8 text-gray-800">Selamat datang di Gresda Food! Dengan mendaftar, mengakses, atau menggunakan layanan platform kami, Anda menyetujui untuk terikat oleh Syarat dan Ketentuan berikut.</p>
+        
+        <h3 id="pendaftaran-akun" class="text-2xl font-bold text-gray-900 mt-10 mb-4 flex items-center gap-3 pt-4">
         <span class="bg-cyan-100 text-cyan-600 w-8 h-8 rounded-full flex items-center justify-center text-sm">1</span> 
         Pendaftaran dan Akun Pengguna
     </h3>
@@ -24,7 +46,7 @@ ob_start();
         <li class="pl-2">Gresda Food berhak untuk menangguhkan atau mengakhiri akun jika ditemukan pelanggaran terhadap ketentuan ini atau tindakan penipuan.</li>
     </ol>
 
-    <h3 class="text-2xl font-bold text-gray-900 mt-10 mb-4 flex items-center gap-3">
+    <h3 id="pemesanan-pembayaran" class="text-2xl font-bold text-gray-900 mt-10 mb-4 flex items-center gap-3 pt-4">
         <span class="bg-cyan-100 text-cyan-600 w-8 h-8 rounded-full flex items-center justify-center text-sm">2</span> 
         Pemesanan dan Pembayaran
     </h3>
@@ -35,7 +57,7 @@ ob_start();
         <li class="pl-2">Dana yang telah ditransfer tidak dapat dikembalikan (Non-refundable) kecuali pesanan dibatalkan oleh pihak restoran akibat kehabisan stok atau kendala internal.</li>
     </ul>
 
-    <h3 class="text-2xl font-bold text-gray-900 mt-10 mb-4 flex items-center gap-3">
+    <h3 id="pengiriman" class="text-2xl font-bold text-gray-900 mt-10 mb-4 flex items-center gap-3 pt-4">
         <span class="bg-cyan-100 text-cyan-600 w-8 h-8 rounded-full flex items-center justify-center text-sm">3</span> 
         Pengiriman
     </h3>
@@ -48,6 +70,7 @@ ob_start();
     <div class="bg-cyan-50 border-l-4 border-cyan-500 p-6 rounded-r-lg mt-12">
         <h4 class="text-lg font-bold text-cyan-900 mb-2">Punya Pertanyaan?</h4>
         <p class="text-cyan-800 text-sm">Jika Anda memiliki pertanyaan lebih lanjut mengenai syarat dan ketentuan di atas, jangan ragu untuk menghubungi tim dukungan pelanggan kami via <span class="font-bold underline cursor-pointer hover:text-cyan-600">Fitur Kontak di Halaman Utama</span>.</p>
+    </div>
     </div>
 </div>
 

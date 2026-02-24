@@ -37,7 +37,7 @@
                 </div>
 
                 <!-- Categories Vertical -->
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6" data-aos="fade-right" data-aos-delay="200">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sticky top-24" data-aos="fade-right" data-aos-delay="200">
                     <h3 class="text-sm font-bold text-gray-800 uppercase tracking-widest mb-4">Kategori</h3>
                     <div class="space-y-0 lg:space-y-2 flex flex-row lg:flex-col overflow-x-auto lg:overflow-visible gap-3 lg:gap-0 pb-2 lg:pb-0 category-list hide-scrollbar">
                         <a href="javascript:void(0)" data-category="all" class="category-link flex-shrink-0 block px-4 py-3 rounded-xl text-sm font-medium transition <?= ($active_category === 'all') ? 'bg-primary text-white shadow-md' : 'text-gray-600 hover:bg-cyan-50 hover:text-cyan-700' ?>">
@@ -77,13 +77,21 @@
                 <!-- Grid Container -->
                 <div id="food-grid-container" class="relative">
                     <?php if(empty($foods)): ?>
-                        <div class="text-center py-20 text-gray-500 bg-white rounded-3xl border border-gray-100 shadow-sm flex-grow flex flex-col items-center justify-center">
-                            <div class="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mb-4">
-                                <i class="fas fa-search text-4xl text-gray-300"></i>
+                        <div class="text-center py-20 px-4 text-gray-500 bg-white rounded-3xl border border-gray-100 shadow-sm flex-grow flex flex-col items-center justify-center">
+                            <div class="relative w-32 h-32 mb-6 group cursor-pointer" onclick="resetFilters()">
+                                <div class="absolute inset-0 bg-red-50 rounded-full scale-100 group-hover:scale-110 transition-transform duration-500"></div>
+                                <div class="absolute inset-0 flex items-center justify-center text-red-400">
+                                    <i class="fas fa-hamburger text-5xl transform -rotate-12 group-hover:rotate-0 transition-transform duration-300"></i>
+                                </div>
+                                <div class="absolute top-0 right-0 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md">
+                                    <i class="fas fa-question text-red-500 font-bold"></i>
+                                </div>
                             </div>
-                            <h3 class="text-2xl font-bold text-gray-700 mb-2">Menu tidak ditemukan</h3>
-                            <p>Coba gunakan kata kunci lain atau hapus filter kategori.</p>
-                            <button type="button" onclick="resetFilters()" class="mt-6 px-6 py-2.5 bg-primary text-white font-semibold rounded-full hover:bg-cyan-700 transition">Reset Pencarian</button>
+                            <h3 class="text-2xl font-black text-gray-800 mb-2">Ups! Menu Tidak Ditemukan</h3>
+                            <p class="text-gray-500 max-w-sm mb-8 leading-relaxed">Kami tidak dapat menemukan hidangan yang Anda cari. Coba gunakan kata kunci berbeda atau hapus filter yang ada.</p>
+                            <button type="button" onclick="resetFilters()" class="text-white bg-primary hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-bold rounded-2xl text-sm px-8 py-3.5 text-center shadow-lg shadow-cyan-500/30 transition-all hover:-translate-y-1">
+                                <i class="fas fa-sync-alt mr-2"></i> Tampilkan Semua Menu
+                            </button>
                         </div>
                     <?php else: ?>
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
