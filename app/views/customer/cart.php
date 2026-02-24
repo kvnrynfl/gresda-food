@@ -8,15 +8,22 @@ ob_start();
 <form id="checkout-form" action="<?= BASEURL ?>/customer/checkoutSelected" method="POST" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
     <?= CSRF::getTokenField() ?>
     <!-- Cart Items -->
-    <div class="lg:col-span-2">
+    <?php $cartColSpan = empty($cart_items) ? 'lg:col-span-3' : 'lg:col-span-2'; ?>
+    <div class="<?= $cartColSpan ?>">
         <?php if (empty($cart_items)): ?>
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-12 text-center flex flex-col items-center justify-center">
-                <div class="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mb-6 text-gray-300">
-                    <i class="fas fa-shopping-basket text-4xl"></i>
+            <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-12 md:p-20 text-center flex flex-col items-center justify-center min-h-[60vh] mx-auto w-full" data-aos="zoom-in">
+                <div class="relative w-40 h-40 mb-8 group cursor-pointer" onclick="window.location.href='<?= BASEURL ?>/menu'">
+                    <div class="absolute inset-0 bg-cyan-50 rounded-full scale-100 group-hover:scale-110 transition-transform duration-500"></div>
+                    <div class="absolute inset-0 flex items-center justify-center text-cyan-400">
+                        <i class="fas fa-shopping-cart text-6xl transform -rotate-12 group-hover:rotate-0 transition-transform duration-300"></i>
+                    </div>
+                    <div class="absolute top-0 right-0 w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-md">
+                        <i class="fas fa-exclamation text-xl text-primary font-bold"></i>
+                    </div>
                 </div>
-                <h3 class="text-2xl font-bold text-gray-800 mb-2">Keranjang Anda kosong</h3>
-                <p class="text-gray-500 mb-6">Sepertinya Anda belum menambahkan apa pun ke keranjang Anda.</p>
-                <a href="<?= BASEURL ?>/menu" class="px-8 py-3 bg-primary text-white font-bold rounded-full hover:bg-cyan-700 transition shadow-md inline-flex items-center gap-2">
+                <h3 class="text-3xl font-black text-gray-800 mb-4 tracking-tight">Keranjang Anda Masih Kosong</h3>
+                <p class="text-gray-500 text-lg max-w-md mx-auto mb-10 leading-relaxed">Sepertinya Anda belum menambahkan hidangan apa pun ke keranjang Anda. Yuk, lihat menu spesial dari kami!</p>
+                <a href="<?= BASEURL ?>/menu" class="px-10 py-4 bg-primary text-white font-bold rounded-2xl hover:bg-cyan-700 transition-all hover:-translate-y-1 shadow-xl shadow-cyan-500/30 inline-flex items-center gap-3 text-lg">
                     <i class="fas fa-hamburger"></i> Jelajahi Menu
                 </a>
             </div>
