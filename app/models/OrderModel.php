@@ -41,6 +41,13 @@ class OrderModel extends Database {
         return $this->resultSet();
     }
 
+    public function updateDetailOrderId($detail_id, $new_order_id) {
+        $this->query("UPDATE tbl_detailorder SET order_id = :order_id WHERE detail_id = :detail_id");
+        $this->bind(':order_id', $new_order_id);
+        $this->bind(':detail_id', $detail_id);
+        return $this->execute();
+    }
+
     public function getPaymentDetails($order_id) {
         $this->query("SELECT * FROM tbl_confirmorder WHERE order_id = :order_id");
         $this->bind(':order_id', $order_id);

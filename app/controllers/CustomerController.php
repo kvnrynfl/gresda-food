@@ -103,22 +103,84 @@ class CustomerController extends Controller {
         }
     }
 
+    public function checkoutSelected() {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && CSRF::verifyToken($_POST['csrf_token'] ?? '')) {
+            if (!isset($_POST['selected_items']) || empty($_POST['selected_items'])) {
+                $_SESSION['flash_error'] = "Pilih setidaknya satu item untuk di-checkout.";
+                $this->redirect('/customer/cart');
+                return;
+            }
+            $_SESSION['checkout_items'] = $_POST['selected_items'];
+            $this->redirect('/customer/checkout');
+        }
+    }
+
     public function checkout() {
+        if (!isset($_SESSION['checkout_items']) || empty($_SESSION['checkout_items'])) {
+            $_SESSION['flash_error'] = "Anda belum memilih item untuk dibayar.";
+            $this->redirect('/customer/cart');
+            return;
+        }
+
         $orderModel = $this->model('OrderModel');
         $data['payment_methods'] = $orderModel->getAllPayments();
+        
+        $activeCart = $orderModel->getActiveCartByUser($_SESSION['user_id']);
+        if ($activeCart) {
+            $allItems = $orderModel->getOrderDetails($activeCart['order_id']);
+            $checkoutItems = [];
+            foreach ($allItems as $item) {
+                if (in_array($item['detail_id'], $_SESSION['checkout_items'])) {
+                    $checkoutItems[] = $item;
+                }
+            }
+            $data['checkout_items'] = $checkoutItems;
+        } else {
+            $this->redirect('/customer/cart');
+        }
+        
         $this->view('customer/checkout', $data);
     }
 
     public function processCheckout() {
         if ($_SERVER['REQUEST_METHOD'] == 'POST' && CSRF::verifyToken($_POST['csrf_token'] ?? '')) {
+            if (!isset($_SESSION['checkout_items']) || empty($_SESSION['checkout_items'])) {
+                $this->redirect('/customer/cart');
+                return;
+            }
             $orderModel = $this->model('OrderModel');
             $activeCart = $orderModel->getActiveCartByUser($_SESSION['user_id']);
             
             if ($activeCart) {
-                // Calculate Total
-                $items = $orderModel->getOrderDetails($activeCart['order_id']);
+                $allItems = $orderModel->getOrderDetails($activeCart['order_id']);
+                
+                $checkoutItems = [];
+                $leftoverItems = [];
+                foreach ($allItems as $item) {
+                    if (in_array($item['detail_id'], $_SESSION['checkout_items'])) {
+                        $checkoutItems[] = $item;
+                    } else {
+                        $leftoverItems[] = $item;
+                    }
+                }
+                
+                if (empty($checkoutItems)) {
+                     $this->redirect('/customer/cart');
+                     return;
+                }
+
+                // Split Cart: Move unselected items to a new Cart ID
+                if (!empty($leftoverItems)) {
+                    $newCartOrderId = uniqid('ORD-');
+                    $orderModel->createCart($newCartOrderId, $_SESSION['user_id']);
+                    foreach ($leftoverItems as $item) {
+                        $orderModel->updateDetailOrderId($item['detail_id'], $newCartOrderId);
+                    }
+                }
+
+                // Calculate Total solely for selected items
                 $totalPrice = 0;
-                foreach ($items as $item) {
+                foreach ($checkoutItems as $item) {
                     $totalPrice += ($item['price'] ?? 0) * ($item['qty'] ?? 1);
                 }
                 
@@ -159,6 +221,9 @@ class CustomerController extends Controller {
                 
                 $orderModel->updateOrderStatus($activeCart['order_id'], 'Payment');
                 
+                // clear session selection
+                unset($_SESSION['checkout_items']);
+
                 $_SESSION['flash_success'] = "Pembayaran berhasil dikonfirmasi. Pesanan sedang diproses.";
             }
             $this->redirect('/customer/orders');

@@ -82,10 +82,68 @@
                 </div>
             </div>
 
-            <!-- Validation Action -->
-            <div class="lg:col-span-1">
+            <!-- Validation Action & Order Summary -->
+            <div class="lg:col-span-1 space-y-6">
+                
+                <!-- Selected Items Summary -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 overflow-hidden">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4 border-b border-gray-100 pb-3 flex items-center justify-between">
+                        <span>Ringkasan Pesanan</span>
+                        <span class="text-sm font-semibold text-primary"><?= count($data['checkout_items'] ?? []) ?> Item</span>
+                    </h3>
+                    <div class="space-y-4 max-h-64 overflow-y-auto pr-2 mb-4">
+                        <?php 
+                        $totalPrice = 0;
+                        if(isset($data['checkout_items']) && !empty($data['checkout_items'])): 
+                            foreach($data['checkout_items'] as $item): 
+                                $sub = $item['price'] * $item['qty'];
+                                $totalPrice += $sub;
+                        ?>
+                            <div class="flex gap-3">
+                                <div class="w-12 h-12 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+                                    <img src="<?= BASEURL ?>/images/foods/<?= htmlspecialchars($item['image_name']) ?>" class="w-full h-full object-cover">
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="text-sm font-bold text-gray-800 leading-tight"><?= htmlspecialchars($item['name']) ?></h4>
+                                    <div class="flex justify-between items-center mt-1">
+                                        <span class="text-xs font-semibold text-gray-500"><?= $item['qty'] ?>x Rp <?= number_format($item['price'], 0, ',', '.') ?></span>
+                                        <span class="text-sm font-bold text-secondary">Rp <?= number_format($sub, 0, ',', '.') ?></span>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php 
+                            endforeach; 
+                        endif; 
+                        $tax = $totalPrice * 0.1;
+                        $shipping = isset($data['checkout_items']) && count($data['checkout_items']) > 0 ? 15000 : 0;
+                        $grandTotal = $totalPrice + $tax + $shipping;
+                        ?>
+                    </div>
+                    
+                    <div class="border-t border-gray-100 pt-3 space-y-2 text-sm inline-block w-full">
+                        <div class="flex justify-between text-gray-600">
+                            <span>Subtotal</span>
+                            <span class="font-medium text-gray-800">Rp <?= number_format($totalPrice, 0, ',', '.') ?></span>
+                        </div>
+                        <div class="flex justify-between text-gray-600">
+                            <span>Pajak (10%)</span>
+                            <span class="font-medium text-gray-800">Rp <?= number_format($tax, 0, ',', '.') ?></span>
+                        </div>
+                        <div class="flex justify-between text-gray-600">
+                            <span>Pengiriman</span>
+                            <span class="font-medium text-gray-800">Rp <?= number_format($shipping, 0, ',', '.') ?></span>
+                        </div>
+                    </div>
+                    <div class="border-t border-gray-200 pt-3 mt-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-base font-bold text-gray-800">Total Pembayaran</span>
+                            <span class="text-xl font-black text-primary">Rp <?= number_format($grandTotal, 0, ',', '.') ?></span>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 sticky top-24">
-                    <h3 class="text-xl font-bold text-gray-800 mb-6 border-b border-gray-100 pb-4">Konfirmasi Pesanan</h3>
+                    <h3 class="text-xl font-bold text-gray-800 mb-6 border-b border-gray-100 pb-4">Konfirmasi Akhir</h3>
                     
                     <button type="button" onclick="confirmCheckout();" class="w-full flex justify-center items-center py-4 bg-green-600 text-white rounded-xl font-bold text-lg hover:bg-green-700 transition shadow-lg gap-2 shadow-green-500/30">
                         <i class="fas fa-check-circle"></i> Selesaikan Pembayaran
