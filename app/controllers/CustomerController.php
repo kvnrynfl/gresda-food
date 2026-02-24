@@ -266,6 +266,9 @@ class CustomerController extends Controller {
                     // Update tbl_confirmorder
                     $orderModel->updateConfirmOrderImage($orderId, $image_name, date('Y-m-d'));
                     
+                    // Update order status to Confirmed so it moves to the next stage
+                    $orderModel->updateOrderStatus($orderId, 'Confirmed');
+                    
                     $_SESSION['flash_success'] = "Bukti pembayaran berhasil diunggah. Kami akan segera memverifikasinya.";
                 } else {
                     $_SESSION['flash_error'] = "Gagal mengunggah bukti pembayaran: " . $upload['message'];

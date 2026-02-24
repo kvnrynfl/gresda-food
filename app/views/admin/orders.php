@@ -66,22 +66,25 @@ include '../app/views/layouts/admin_header.php';
                             </div>
                         </td>
                         <td class="px-6 py-4 text-center">
-                            <?php if ($order['status'] !== 'Finished' && $order['status'] !== 'Canceled' && $order['status'] !== 'Cart'): ?>
-                            <form action="<?= BASEURL ?>/admin/updateOrderStatus/<?= urlencode($order['order_id']) ?>" method="POST" class="flex gap-2 justify-center">
-                                <?= CSRF::getTokenField() ?>
-                                <select name="status" class="text-sm border border-gray-300 rounded-lg px-2 py-1 outline-none focus:ring-1 focus:ring-primary focus:border-primary">
-                                    <option value="Confirmed" <?= ($order['status'] == 'Confirmed') ? 'selected' : '' ?>>Dikonfirmasi</option>
-                                    <option value="Delivery" <?= ($order['status'] == 'Delivery') ? 'selected' : '' ?>>Pengiriman</option>
-                                    <option value="Finished" <?= ($order['status'] == 'Finished') ? 'selected' : '' ?>>Selesai</option>
-                                    <option value="Canceled">Batalkan Pesanan</option>
-                                </select>
-                                <button type="submit" class="bg-gray-800 text-white text-xs px-3 py-1.5 rounded-lg hover:bg-black transition font-semibold shadow-sm">
-                                    Perbarui
-                                </button>
-                            </form>
-                            <?php else: ?>
-                            <span class="text-xs font-bold text-gray-400 italic">Tidak ada aksi tersedia</span>
-                            <?php endif; ?>
+                            <div class="flex flex-col gap-2 items-center justify-center">
+                                <?php if ($order['status'] !== 'Finished' && $order['status'] !== 'Canceled' && $order['status'] !== 'Cart'): ?>
+                                <form action="<?= BASEURL ?>/admin/updateOrderStatus/<?= urlencode($order['order_id']) ?>" method="POST" class="flex gap-1 justify-center w-full">
+                                    <?= CSRF::getTokenField() ?>
+                                    <select name="status" class="text-xs border border-gray-300 rounded-lg px-2 py-1 outline-none focus:ring-1 focus:ring-primary focus:border-primary w-28">
+                                        <option value="Confirmed" <?= ($order['status'] == 'Confirmed') ? 'selected' : '' ?>>Dikonfirmasi</option>
+                                        <option value="Delivery" <?= ($order['status'] == 'Delivery') ? 'selected' : '' ?>>Pengiriman</option>
+                                        <option value="Finished" <?= ($order['status'] == 'Finished') ? 'selected' : '' ?>>Selesai</option>
+                                        <option value="Canceled">Batalkan</option>
+                                    </select>
+                                    <button type="submit" title="Simpan Status" class="bg-gray-800 text-white text-xs px-2 py-1 rounded-lg hover:bg-black transition font-semibold shadow-sm">
+                                        <i class="fas fa-save"></i>
+                                    </button>
+                                </form>
+                                <?php endif; ?>
+                                <a href="<?= BASEURL ?>/admin/orderDetails/<?= urlencode($order['order_id']) ?>" class="bg-white border border-primary text-primary hover:bg-primary hover:text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition shadow-sm w-full text-center">
+                                    <i class="fas fa-eye mr-1"></i> Detail Pesanan
+                                </a>
+                            </div>
                         </td>
                     </tr>
                 <?php endforeach; else: ?>

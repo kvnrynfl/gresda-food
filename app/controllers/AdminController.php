@@ -105,6 +105,30 @@ class AdminController extends Controller {
         $this->view('admin/orders', $data);
     }
     
+    public function orderDetails($id) {
+        $orderModel = $this->model('OrderModel');
+        
+        $data['order'] = null;
+        // Search $id in all orders
+        foreach($orderModel->getAllOrders() as $order) {
+            if ($order['order_id'] == $id) {
+                $data['order'] = $order;
+                break;
+            }
+        }
+        
+        if (!$data['order']) {
+            $this->redirect('/admin/orders');
+            return;
+        }
+
+        $data['details'] = $orderModel->getOrderDetails($id);
+        $data['confirm'] = $orderModel->getConfirmOrder($id);
+        $data['order_id'] = $id;
+
+        $this->view('admin/order_details', $data);
+    }
+    
     public function updateOrderStatus($id) {
         if ($_SERVER['REQUEST_METHOD'] == 'POST' && CSRF::verifyToken($_POST['csrf_token'] ?? '')) {
             $status = Sanitize::string($_POST['status']);
