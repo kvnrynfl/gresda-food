@@ -1,8 +1,14 @@
 <?php include '../app/views/layouts/header.php'; ?>
 
 <!-- Page Header -->
-<div class="bg-secondary text-white pt-24 pb-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center animate-fade-in-up">
+<div class="relative bg-secondary text-white pt-20 pb-16 overflow-hidden">
+    <!-- Decorative background blobs -->
+    <div class="absolute top-0 left-0 w-full h-full overflow-hidden opacity-20 pointer-events-none">
+        <div class="absolute -top-[20%] -right-[10%] w-[50%] h-[150%] bg-gradient-to-b from-primary to-transparent rounded-full blur-3xl transform rotate-45"></div>
+        <div class="absolute top-[40%] -left-[20%] w-[60%] h-[100%] bg-gradient-to-t from-cyan-600 to-transparent rounded-full blur-3xl transform -rotate-12"></div>
+    </div>
+    
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center animate-fade-in-up z-10">
         <h1 class="text-4xl md:text-5xl font-extrabold mb-4">Tentang Gresda Food</h1>
         <p class="text-gray-300 text-lg max-w-2xl mx-auto">Temukan kisah kami, renjana kami, dan dedikasi kami pada keunggulan kuliner.</p>
     </div>
