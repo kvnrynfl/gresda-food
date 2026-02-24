@@ -10,8 +10,6 @@
             <h1 class="text-3xl font-bold text-gray-900">Pembayaran Pesanan</h1>
         </div>
 
-        <?php Flasher::flash(); ?>
-
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-6">
             <div class="bg-gradient-to-r from-blue-50 to-white border-b border-gray-100 px-8 py-6 flex flex-col sm:flex-row justify-between sm:items-center gap-6">
                 <div>

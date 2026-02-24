@@ -357,7 +357,7 @@ CREATE TABLE `tbl_users` (
 --
 
 INSERT INTO `tbl_users` (`id`, `full_name`, `username`, `email`, `password`, `img_user`, `role`) VALUES
-('c6bfd833-8167-44f2-916a-d9f24590099b', 'Administrator', 'superadmin', 'superadmin@gresdafood.com', '$2a$12$rgvc/gwskWyjbAzfuVWBG.Y.y/mJ/dpkAoW19/9YCEvS/QSjZ/Kiu', '1731.jpg', 'admin'),
+('c6bfd833-8167-44f2-916a-d9f24590099b', 'Administrator', 'superadmin', 'superadmin@gresdafood.com', '$2a$12$rgvc/gwskWyjbAzfuVWBG.Y.y/mJ/dpkAoW19/9YCEvS/QSjZ/Kiu', 'default.jpg', 'admin'),
 ('1bf85fa8-7c6e-46f5-8e1f-ed186ca8f64b', 'Kevin Reynaufal', 'Kevin Reynaufal', 'kevinreynaufal2004@gmail.com', '$2a$12$ZCul5FGz74xNekXa/VEJPuE63RNVUryJi9BRvglpGYgHTnTnZkAG.', '1731.jpg', 'customer'),
 ('b2afcaeb-b6d2-4097-bb45-53007d358366', 'Irfan Rizqy', 'Irfan Rizqy ', 'irfanrizqy123@gmail.com', '$2a$12$ZCul5FGz74xNekXa/VEJPuE63RNVUryJi9BRvglpGYgHTnTnZkAG.', '1759.jpg', 'customer'),
 ('2b8a42fb-3dc5-42c0-afb9-9ba56bd9bc99', 'Fahri Arsyah', 'Fahri Arsyah', 'fahriarsyah123@gmail.com', '$2a$12$ZCul5FGz74xNekXa/VEJPuE63RNVUryJi9BRvglpGYgHTnTnZkAG.', '9622.jpg', 'customer'),
