@@ -327,10 +327,10 @@ CREATE TABLE `tbl_review` (
 --
 
 INSERT INTO `tbl_review` (`id`, `order_id`, `user_id`, `rating`, `message`, `tgl_review`, `active`) VALUES
-('61cbcc7c-1f2e-4b95-8fa8-4c6af0f079dd', 'ORD-16VO00TGHMNK', '1bf85fa8-7c6e-46f5-8e1f-ed186ca8f64b', 1.0, 'Waktu datang kesini udah langsung di sambut pelayan yang ramah, trus hidangan makananya juga enak, ditambah suasana dan pemandangan yang indah, Serasa makan di restoran mahal...', '2021-10-11', 'Yes'),
+('61cbcc7c-1f2e-4b95-8fa8-4c6af0f079dd', 'ORD-16VO00TGHMNK', '1bf85fa8-7c6e-46f5-8e1f-ed186ca8f64b', 5.0, 'Waktu datang kesini udah langsung di sambut pelayan yang ramah, trus hidangan makananya juga enak, ditambah suasana dan pemandangan yang indah, Serasa makan di restoran mahal...', '2021-10-11', 'Yes'),
 ('fac54d46-3549-4efb-8668-9ccbfebe91ed', 'ORD-16VDICBP7HPHK', 'b2afcaeb-b6d2-4097-bb45-53007d358366', 4.5, 'Pertama diajakin sama pacar kesini kirain menu nya bakal mahal karena vibes tempatnya yang classy banget, ehh ternyata menu nya murah murah dan enak. Pokoknya recomended banget inimah,', '2021-10-11', 'Yes'),
 ('d0cf5abd-961a-4d30-a6b3-8a2664e830ab', 'ORD-167DSCRBUDJUO', '2b8a42fb-3dc5-42c0-afb9-9ba56bd9bc99', 4.5, 'Awalnya saya ragu sih karena ini rumah makan yang bisa di bilang high, setelah saya dan mantan saya melihat menu ternyata harganya sangat murah sekali dan makanan nya pun enak, akhirnya restoran ini adalah tempat terakhir saya dan mantan saya berjalan berdua, ', '2021-10-11', 'Yes'),
-('1d98e45c-6ae7-4bc3-ac0d-be7fa1a5361a', 'ORD-16IRGHP0NI8EA', 'd817e654-c978-4cd0-a878-6872888472b3', 4.5, 'Pelayanannya cukup cepat tidak membuat kita menunggu terlalu lama, dan untuk makanan disini cukup enak hanya saja kurang banyak karena saya anak kost :)', '2021-10-11', 'Yes');
+('1d98e45c-6ae7-4bc3-ac0d-be7fa1a5361a', 'ORD-16IRGHP0NI8EA', 'd817e654-c978-4cd0-a878-6872888472b3', 3.5, 'Pelayanannya cukup cepat tidak membuat kita menunggu terlalu lama, dan untuk makanan disini cukup enak hanya saja kurang banyak karena saya anak kost :)', '2021-10-11', 'Yes');
 
 -- --------------------------------------------------------
 
