@@ -33,12 +33,12 @@
                 <?= CSRF::getTokenField() ?>
                 
                 <div>
-                    <label for="email" class="block text-sm font-semibold text-gray-700">Alamat Email</label>
+                    <label for="login_id" class="block text-sm font-semibold text-gray-700">Nama Pengguna atau Email</label>
                     <div class="mt-2 relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i class="fas fa-envelope text-gray-400"></i>
+                            <i class="fas fa-user text-gray-400"></i>
                         </div>
-                        <input id="email" name="email" type="email" autocomplete="email" required class="pl-10 appearance-none block w-full px-3 py-3 rounded-lg border border-gray-300 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition" placeholder="anda@contoh.com" value="<?= htmlspecialchars($email ?? '') ?>">
+                        <input id="login_id" name="login_id" type="text" autocomplete="username" required class="pl-10 appearance-none block w-full px-3 py-3 rounded-lg border border-gray-300 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition" placeholder="username atau email" value="<?= htmlspecialchars($login_id ?? '') ?>">
                     </div>
                 </div>
 

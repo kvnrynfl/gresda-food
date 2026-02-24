@@ -7,39 +7,44 @@ class AuthController extends Controller {
     }
 
     public function login() {
-        // If GET, load User Login View
         if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-            $data = ['email' => '', 'error' => ''];
+            $data = ['login_id' => '', 'error' => ''];
             $this->view('auth/login', $data);
         } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            // Validate CSRF
             if (!CSRF::verifyToken($_POST['csrf_token'] ?? '')) {
                 die('Validasi token CSRF gagal. Permintaan tidak sah.');
             }
 
-            // Sanitize inputs
             $_POST = Sanitize::array($_POST);
 
-            $email = $_POST['email'];
+            $loginId = $_POST['login_id'] ?? $_POST['email']; // Support 'email' name temporarily if view isn't fully updated yet
             $password = $_POST['password'];
 
             $userModel = $this->model('UserModel');
-            $user = $userModel->findUserByEmail($email);
+            $user = $userModel->findByUsernameOrEmail($loginId);
 
             if ($user) {
-                // Verify against Bcrypt or legacy SHA1
+                // Verify against Bcrypt or legacy SHA1/MD5
+                $valid = false;
                 if (password_verify($password, $user['password'])) {
-                    $this->createUserSession($user);
-                } elseif (sha1($password) === $user['password']) {
-                    // Upgrade legacy hash to Bcrypt
+                    $valid = true;
+                } elseif (sha1($password) === $user['password'] || md5($password) === $user['password']) {
                     $newHash = password_hash($password, PASSWORD_BCRYPT);
                     $userModel->updatePassword($user['id'], $newHash);
-                    $this->createUserSession($user);
+                    $valid = true;
+                }
+
+                if ($valid) {
+                    if ($user['role'] === 'admin') {
+                        $this->createAdminSession($user);
+                    } else {
+                        $this->createUserSession($user);
+                    }
                 } else {
-                    $this->view('auth/login', ['error' => 'Kata sandi salah', 'email' => $email]);
+                    $this->view('auth/login', ['error' => 'Kata sandi salah', 'login_id' => $loginId]);
                 }
             } else {
-                $this->view('auth/login', ['error' => 'Tidak ada pengguna yang ditemukan dengan email tersebut', 'email' => $email]);
+                $this->view('auth/login', ['error' => 'Akun tidak ditemukan', 'login_id' => $loginId]);
             }
         }
     }
@@ -73,41 +78,8 @@ class AuthController extends Controller {
     }
 
     public function adminLogin() {
-        // If GET, load Admin Login View
-        if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-            $data = ['username' => '', 'error' => ''];
-            $this->view('auth/admin-login', $data);
-        } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            // Validate CSRF
-            if (!CSRF::verifyToken($_POST['csrf_token'] ?? '')) {
-                die('Validasi token CSRF gagal. Permintaan tidak sah.');
-            }
-
-            // Sanitize inputs
-            $_POST = Sanitize::array($_POST);
-
-            $username = $_POST['username'];
-            $password = $_POST['password'];
-
-            $adminModel = $this->model('AdminModel');
-            $admin = $adminModel->findAdminByUsername($username);
-
-            if ($admin) {
-                // Verification against Bcrypt or legacy MD5
-                if (password_verify($password, $admin['password'])) {
-                    $this->createAdminSession($admin);
-                } elseif (md5($password) === $admin['password']) {
-                    // Upgrade legacy hash to Bcrypt
-                    $newHash = password_hash($password, PASSWORD_BCRYPT);
-                    $adminModel->updatePassword($admin['id'], $newHash);
-                    $this->createAdminSession($admin);
-                } else {
-                    $this->view('auth/admin-login', ['error' => 'Kata sandi salah', 'username' => $username]);
-                }
-            } else {
-                $this->view('auth/admin-login', ['error' => 'Tidak ada admin yang ditemukan dengan nama pengguna tersebut', 'username' => $username]);
-            }
-        }
+        // Deprecated, redirect to normal login
+        $this->redirect('/auth/login');
     }
 
     public function logout() {

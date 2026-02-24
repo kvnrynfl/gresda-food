@@ -79,7 +79,7 @@
                     <a href="<?= BASEURL ?>/menu" class="nav-link font-medium hover:text-primary transition <?php echo (isset($title) && $title === 'Home') ? 'text-white' : 'text-gray-600'; ?>">Menu</a>
                     <a href="<?= BASEURL ?>/contact" class="nav-link font-medium hover:text-primary transition <?php echo (isset($title) && $title === 'Home') ? 'text-white' : 'text-gray-600'; ?>">Kontak</a>
                     
-                    <?php if(isset($_SESSION['user_id'])): 
+                    <?php if(isset($_SESSION['role'])): 
                         $globalCartCount = 0;
                         if($_SESSION['role'] === 'customer') {
                             require_once '../app/models/OrderModel.php';
@@ -105,17 +105,21 @@
                         <div class="relative group <?php echo ($_SESSION['role'] === 'customer') ? 'ml-4' : ''; ?>">
                             <button class="flex items-center gap-2 nav-link font-medium hover:text-primary transition <?php echo (isset($title) && $title === 'Home') ? 'text-white' : 'text-gray-600'; ?>">
                                 <i class="fas fa-user-circle text-xl"></i>
-                                <?= $_SESSION['username'] ?>
+                                <?= $_SESSION['username'] ?? $_SESSION['admin_username'] ?>
                             </button>
                             <div class="absolute right-0 w-64 mt-2 bg-white border border-gray-100 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top-right scale-95 group-hover:scale-100 z-50">
                                 <div class="px-5 py-4 border-b border-gray-50 bg-gray-50/50 rounded-t-xl">
-                                    <p class="text-sm font-bold text-gray-900 truncate"><?= htmlspecialchars($_SESSION['username']) ?></p>
-                                    <p class="text-xs text-gray-500 truncate flex items-center gap-1 mt-1"><i class="fas fa-check-circle text-green-500"></i> Akun Pelanggan</p>
+                                    <p class="text-sm font-bold text-gray-900 truncate"><?= htmlspecialchars($_SESSION['username'] ?? $_SESSION['admin_username']) ?></p>
+                                    <p class="text-xs text-gray-500 truncate flex items-center gap-1 mt-1"><i class="fas fa-check-circle text-green-500"></i> <?= $_SESSION['role'] === 'admin' ? 'Akun Administrator' : 'Akun Pelanggan' ?></p>
                                 </div>
                                 <div class="py-2">
+                                    <?php if($_SESSION['role'] === 'admin'): ?>
+                                    <a href="<?= BASEURL ?>/admin/dashboard" class="block px-5 py-2.5 text-sm text-gray-700 hover:bg-cyan-50 hover:text-primary transition flex items-center gap-3"><i class="fas fa-tachometer-alt text-gray-400 w-4 text-center"></i> Dashboard Admin</a>
+                                    <?php else: ?>
                                     <a href="<?= BASEURL ?>/customer/profile" class="block px-5 py-2.5 text-sm text-gray-700 hover:bg-cyan-50 hover:text-primary transition flex items-center gap-3"><i class="fas fa-user-circle text-gray-400 w-4 text-center"></i> Profil Saya</a>
                                     <a href="<?= BASEURL ?>/customer/editProfile" class="block px-5 py-2.5 text-sm text-gray-700 hover:bg-cyan-50 hover:text-primary transition flex items-center gap-3"><i class="fas fa-cog text-gray-400 w-4 text-center"></i> Pengaturan Akun</a>
                                     <a href="<?= BASEURL ?>/customer/orders" class="block px-5 py-2.5 text-sm text-gray-700 hover:bg-cyan-50 hover:text-primary transition flex items-center gap-3"><i class="fas fa-history text-gray-400 w-4 text-center"></i> Riwayat Transaksi</a>
+                                    <?php endif; ?>
                                 </div>
                                 <div class="border-t border-gray-100"></div>
                                 <div class="py-1">
@@ -145,7 +149,8 @@
                 <a href="<?= BASEURL ?>/menu" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-cyan-50 border-b border-gray-50">Menu</a>
                 <a href="<?= BASEURL ?>/contact" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-cyan-50 border-b border-gray-50">Kontak</a>
                 
-                <?php if(isset($_SESSION['user_id'])): ?>
+                <?php if(isset($_SESSION['role'])): ?>
+                    <?php if($_SESSION['role'] === 'customer'): ?>
                     <a href="<?= BASEURL ?>/customer/cart" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-cyan-50 border-b border-gray-50">
                         <i class="fas fa-shopping-cart w-5 mr-1 text-center"></i> Keranjang (<span class="text-primary"><?= $globalCartCount ?? 0 ?></span>)
                     </a>
@@ -155,7 +160,12 @@
                     <a href="<?= BASEURL ?>/customer/orders" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-cyan-50 border-b border-gray-50">
                         <i class="fas fa-history w-5 mr-1 text-center"></i> Riwayat
                     </a>
-                    <a href="<?= BASEURL ?>/auth/logout" class="block px-3 py-2 rounded-md font-bold text-red-500 hover:bg-red-50 mt-2">
+                    <?php else: ?>
+                    <a href="<?= BASEURL ?>/admin/dashboard" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-cyan-50 border-b border-gray-50">
+                        <i class="fas fa-tachometer-alt w-5 mr-1 text-center"></i> Dashboard Admin
+                    </a>
+                    <?php endif; ?>
+                    <a href="<?= BASEURL ?>/auth/logout" class="block px-3 py-2 rounded-md font-bold text-red-500 hover:bg-red-50 mt-2 border-t border-gray-50">
                         <i class="fas fa-sign-out-alt w-5 mr-1 text-center"></i> Keluar
                     </a>
                 <?php else: ?>
