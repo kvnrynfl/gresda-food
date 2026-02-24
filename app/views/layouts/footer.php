@@ -16,8 +16,9 @@
                 <h4 class="text-lg font-semibold mb-4 border-b border-gray-600 pb-2">Tautan Cepat</h4>
                 <ul class="space-y-2">
                     <li><a href="<?= BASEURL ?>/" class="text-gray-400 hover:text-white transition"><i class="fas fa-chevron-right text-xs mr-2"></i>Beranda</a></li>
-                    <li><a href="<?= BASEURL ?>/about" class="text-gray-400 hover:text-white transition"><i class="fas fa-chevron-right text-xs mr-2"></i>Tentang Kami</a></li>
                     <li><a href="<?= BASEURL ?>/menu" class="text-gray-400 hover:text-white transition"><i class="fas fa-chevron-right text-xs mr-2"></i>Menu Makanan</a></li>
+                    <li><a href="<?= BASEURL ?>/legal/terms" class="text-gray-400 hover:text-white transition"><i class="fas fa-chevron-right text-xs mr-2"></i>Syarat & Ketentuan</a></li>
+                    <li><a href="<?= BASEURL ?>/legal/privacy" class="text-gray-400 hover:text-white transition"><i class="fas fa-chevron-right text-xs mr-2"></i>Kebijakan Privasi</a></li>
                 </ul>
             </div>
             
@@ -27,7 +28,7 @@
                 <ul class="space-y-3 text-gray-400">
                     <li class="flex items-start gap-3"><i class="fas fa-map-marker-alt mt-1"></i> Rancaekek, Kab. Bandung, Jawa Barat</li>
                     <li class="flex items-center gap-3"><i class="fas fa-phone"></i> +62 821-2708-3486</li>
-                    <li class="flex items-center gap-3"><i class="fas fa-envelope"></i> gresda_food@gmail.com</li>
+                    <li class="flex items-center gap-3"><i class="fas fa-envelope"></i>support@gresdafood.com</li>
                 </ul>
                 <div class="flex gap-4 mt-6">
                     <a href="#" class="h-10 w-10 rounded-full bg-gray-700 flex items-center justify-center hover:bg-primary transition"><i class="fab fa-facebook-f text-white"></i></a>

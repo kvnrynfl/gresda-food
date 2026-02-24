@@ -36,7 +36,7 @@
                         <i class="fas fa-envelope"></i>
                     </div>
                     <h4 class="text-xl font-bold text-gray-800 mb-2">Alamat Email</h4>
-                    <p class="text-gray-600">halo@gresdafood.com<br>bantuan@gresdafood.com</p>
+                    <p class="text-gray-600">support@gresdafood.com</p>
                 </div>
             </div>
             

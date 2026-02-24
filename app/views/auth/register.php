@@ -79,6 +79,12 @@ include '../app/views/layouts/header.php';
                         <input id="password" name="password" type="password" required minlength="8" class="pl-10 appearance-none block w-full px-3 py-3 rounded-lg border border-gray-300 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition" placeholder="Minimal 8 karakter">
                     </div>
                 </div>
+                <div class="flex items-start mt-4">
+                    <div class="flex items-center h-5">
+                        <input id="terms" name="terms" type="checkbox" required class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary accent-primary">
+                    </div>
+                    <label for="terms" class="ml-2 text-sm font-medium text-gray-900">Saya setuju dengan <a href="<?= BASEURL ?>/legal/terms" target="_blank" class="text-blue-600 hover:underline">Syarat & Ketentuan</a> serta <a href="<?= BASEURL ?>/legal/privacy" target="_blank" class="text-blue-600 hover:underline">Kebijakan Privasi</a>.</label>
+                </div>
 
                 <div class="pt-2">
                     <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-sm border-b-4 border-cyan-700 text-lg font-bold text-white bg-primary hover:bg-cyan-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all active:border-b-0 active:translate-y-1">
