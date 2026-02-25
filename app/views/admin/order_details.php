@@ -94,7 +94,7 @@ $totalPrice = 0;
                             $totalPrice += $itemTotal;
                         ?>
                         <div class="flex items-center gap-4 p-4 rounded-xl border border-gray-100 bg-white hover:border-primary/30 transition shadow-sm group">
-                            <img src="<?= BASEURL ?>/uploads/foods/<?= htmlspecialchars($item['image_name']) ?>" alt="<?= htmlspecialchars($item['title']) ?>" class="w-20 h-20 object-cover rounded-lg shadow-sm" onerror="this.src='https://via.placeholder.com/150?text=No+Image'">
+                            <img src="<?= BASEURL ?>/images/foods/<?= htmlspecialchars($item['image_name']) ?>" alt="<?= htmlspecialchars($item['title']) ?>" class="w-20 h-20 object-cover rounded-lg shadow-sm" onerror="this.src='https://ui-avatars.com/api/?name=<?= urlencode($item['title'] ?? 'Menu') ?>&background=random&color=fff'">
                             <div class="flex-grow">
                                 <h4 class="font-bold text-gray-800 group-hover:text-primary transition"><?= htmlspecialchars($item['title']) ?></h4>
                                 <div class="flex justify-between items-end mt-2">
@@ -142,7 +142,7 @@ $totalPrice = 0;
                     <div class="w-full sm:w-1/2 bg-white p-2 rounded-2xl border border-indigo-200 shadow-sm">
                         <!-- Make the image clickable to view larger -->
                         <a href="<?= BASEURL ?>/images/confirm/<?= htmlspecialchars($confirm['image_name']) ?>" target="_blank" title="Klik untuk memperbesar">
-                            <img src="<?= BASEURL ?>/images/confirm/<?= htmlspecialchars($confirm['image_name']) ?>" alt="Bukti Pembayaran" class="w-full h-auto rounded-xl max-h-96 object-contain bg-gray-50 cursor-zoom-in hover:opacity-90 transition" onerror="this.src='https://via.placeholder.com/400x300?text=Gambar+Tidak+Ditemukan'">
+                            <img src="<?= BASEURL ?>/images/confirm/<?= htmlspecialchars($confirm['image_name']) ?>" alt="Bukti Pembayaran" class="w-full h-auto rounded-xl max-h-96 object-contain bg-gray-50 cursor-zoom-in hover:opacity-90 transition" onerror="this.src='https://ui-avatars.com/api/?name=Bukti+Pembayaran&background=E53E3E&color=fff'">
                         </a>
                     </div>
                     <div class="w-full sm:w-1/2 space-y-4">

@@ -30,7 +30,7 @@ ob_start();
                 <label class="relative border border-gray-200 rounded-2xl p-4 flex flex-col items-center cursor-pointer hover:border-primary peer-checked:border-primary peer-checked:bg-cyan-50 peer-checked:shadow-md transition-all group">
                     <input type="radio" name="payment_method" value="<?= htmlspecialchars($pm['metode']) ?>" data-rek="<?= htmlspecialchars($pm['rekening_number']) ?>" data-an="<?= htmlspecialchars($pm['an']) ?>" class="absolute opacity-0 peer payment-radio" required <?php echo ($index == 0) ? 'checked' : ''; ?>>
                     <div class="w-full h-full absolute inset-0 rounded-2xl border-2 border-transparent peer-checked:border-primary pointer-events-none group-hover:bg-cyan-50/30 transition-colors"></div>
-                    <img src="<?= BASEURL ?>/images/payment/<?= htmlspecialchars($pm['image_name']) ?>" alt="<?= htmlspecialchars($pm['metode']) ?>" class="h-8 mb-2 object-contain scale-95 peer-checked:scale-105 transition-transform" onerror="this.src='https://via.placeholder.com/80x30?text=<?= urlencode($pm['metode']) ?>'">
+                    <img src="<?= BASEURL ?>/images/payment/<?= htmlspecialchars($pm['image_name']) ?>" alt="<?= htmlspecialchars($pm['metode']) ?>" class="h-8 mb-2 object-contain scale-95 peer-checked:scale-105 transition-transform" onerror="this.src='https://ui-avatars.com/api/?name=<?= urlencode($pm['metode']) ?>&background=random&color=fff'">
                     <span class="text-sm font-medium text-gray-700 text-center mt-2"><?= htmlspecialchars($pm['metode']) ?></span>
                 </label>
                 <?php endforeach; else: ?>
@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 ?>
                     <div class="flex gap-3">
                         <div class="w-12 h-12 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
-                            <img src="<?= BASEURL ?>/images/foods/<?= htmlspecialchars($item['image_name']) ?>" class="w-full h-full object-cover">
+                            <img src="<?= BASEURL ?>/images/foods/<?= htmlspecialchars($item['image_name']) ?>" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=<?= urlencode($item['name']) ?>&background=random&color=fff'">
                         </div>
                         <div class="flex-1">
                             <h4 class="text-sm font-bold text-gray-800 line-clamp-1"><?= htmlspecialchars($item['name']) ?></h4>

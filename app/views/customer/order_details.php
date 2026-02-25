@@ -125,7 +125,7 @@ ob_start();
                     <div class="flex items-center justify-between border-b border-gray-100 pb-6 last:border-0 last:pb-0">
                         <div class="flex items-center gap-4">
                             <div class="w-20 h-20 bg-gray-100 rounded-xl overflow-hidden shadow-sm flex-shrink-0">
-                                <img src="<?= BASEURL ?>/images/foods/<?= htmlspecialchars($item['image_name'] ?? 'default.jpg') ?>" alt="<?= htmlspecialchars($item['name'] ?? 'Menu') ?>" class="w-full h-full object-cover">
+                                <img src="<?= BASEURL ?>/images/foods/<?= htmlspecialchars($item['image_name'] ?? 'default.jpg') ?>" alt="<?= htmlspecialchars($item['name'] ?? 'Menu') ?>" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=<?= urlencode($item['name'] ?? 'Menu') ?>&background=random&color=fff'">
                             </div>
                             <div>
                                 <h4 class="font-bold text-gray-800 text-lg"><?= htmlspecialchars($item['name'] ?? 'Item') ?></h4>
@@ -172,7 +172,7 @@ ob_start();
         </h3>
         <div class="flex flex-col sm:flex-row gap-8 items-start">
             <div class="w-full sm:w-1/2 bg-white p-2 rounded-2xl border border-gray-200 shadow-sm">
-                <img src="<?= BASEURL ?>/images/confirm/<?= htmlspecialchars($confirm['image_name']) ?>" alt="Bukti Pembayaran" class="w-full h-auto rounded-xl max-h-96 object-contain bg-gray-50" onerror="this.src='https://via.placeholder.com/400x300?text=Gambar+Tidak+Ditemukan'">
+                <img src="<?= BASEURL ?>/images/confirm/<?= htmlspecialchars($confirm['image_name']) ?>" alt="Bukti Pembayaran" class="w-full h-auto rounded-xl max-h-96 object-contain bg-gray-50" onerror="this.src='https://ui-avatars.com/api/?name=Bukti+Pembayaran&background=E53E3E&color=fff'">
             </div>
             <div class="w-full sm:w-1/2 space-y-4">
                 <div>

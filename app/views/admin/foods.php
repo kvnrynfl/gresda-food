@@ -37,7 +37,7 @@ include '../app/views/layouts/admin_header.php';
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-4">
                                 <div class="w-12 h-12 rounded-lg bg-gray-100 overflow-hidden flex-shrink-0 shadow-sm border border-gray-200">
-                                    <img src="<?= BASEURL ?>/images/foods/<?= htmlspecialchars($food['image_name']) ?>" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/150?text=No+Image'">
+                                    <img src="<?= BASEURL ?>/images/foods/<?= htmlspecialchars($food['image_name']) ?>" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=<?= urlencode($food['name'] ?? 'Food') ?>&background=random&color=fff'">
                                 </div>
                                 <div>
                                     <div class="font-bold text-gray-800"><?= htmlspecialchars($food['name']) ?></div>

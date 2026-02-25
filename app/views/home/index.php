@@ -36,7 +36,7 @@
         <div class="flex flex-col lg:flex-row gap-16 items-center">
             <div class="lg:w-1/2 relative" data-aos="fade-right">
                 <div class="absolute -inset-4 bg-cyan-100 rounded-3xl transform -rotate-3 z-0"></div>
-                <img src="<?= BASEURL ?>/images/aesthetic/01.jpg" alt="Tentang Gresda Food" class="relative z-10 rounded-2xl shadow-xl w-full object-cover h-[450px]" onerror="this.src='https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80'">
+                <img src="<?= BASEURL ?>/images/aesthetic/01.jpg" alt="Tentang Gresda Food" class="relative z-10 rounded-2xl shadow-xl w-full object-cover h-[450px]" onerror="this.src='https://ui-avatars.com/api/?name=Gresda+Food&background=random&color=fff'">
                 <div class="absolute -bottom-6 -right-6 bg-white p-6 rounded-2xl shadow-xl z-20 flex items-center gap-4 hidden sm:flex animate-float">
                     <div class="w-16 h-16 bg-primary text-white rounded-full flex items-center justify-center text-2xl font-bold">5+</div>
                     <div>
@@ -101,9 +101,8 @@
                                 <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition z-10"></div>
                                 <?php 
                                     $imgUrl = BASEURL . '/images/foods/' . htmlspecialchars($food['image_name']);
-                                    $fallbackImg = "https://images.unsplash.com/photo-1544025162-d76694265947?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80";
                                 ?>
-                                <img src="<?= $imgUrl ?>" alt="<?= htmlspecialchars($food['name']) ?>" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" onerror="this.src='<?= $fallbackImg ?>'">
+                                <img src="<?= $imgUrl ?>" alt="<?= htmlspecialchars($food['name']) ?>" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" onerror="this.src='https://ui-avatars.com/api/?name=<?= urlencode($food['name']) ?>&background=random&color=fff'">
                                 <span class="absolute top-4 right-4 bg-white text-secondary font-bold px-3 py-1 rounded-full shadow z-20">Rp <?= number_format($food['price'] ?? 0, 0, ',', '.') ?></span>
                             </div>
                             <div class="p-6 flex-grow flex flex-col">

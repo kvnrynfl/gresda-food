@@ -18,7 +18,7 @@
 <section class="py-20 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row gap-12 items-center">
         <div class="md:w-1/2">
-            <img src="<?= BASEURL ?>/images/aesthetic/home-bg.jpg" alt="About Gresda" class="rounded-2xl shadow-2xl w-full object-cover h-[500px]" onerror="this.src='https://images.unsplash.com/photo-1514933651103-005eec06c04b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80'">
+            <img src="<?= BASEURL ?>/images/aesthetic/home-bg.jpg" alt="About Gresda" class="rounded-2xl shadow-2xl w-full object-cover h-[500px]" onerror="this.src='https://ui-avatars.com/api/?name=About+Gresda&background=random&color=fff'">
         </div>
         <div class="md:w-1/2">
             <h2 class="text-primary font-bold tracking-widest uppercase text-sm mb-2">Kisah Kami</h2>

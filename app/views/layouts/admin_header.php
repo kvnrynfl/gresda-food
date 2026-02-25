@@ -65,7 +65,7 @@
             <h1 class="text-2xl font-bold text-gray-800"><?= $title ?? 'Dasbor' ?></h1>
             <div class="flex items-center gap-4">
                 <span class="text-sm font-medium text-gray-500">Selamat datang kembali, <span class="text-gray-900 font-bold"><?= $_SESSION['admin_fullname'] ?? $_SESSION['admin_username'] ?? 'Admin' ?></span></span>
-                <img src="<?= BASEURL ?>/images/default.jpg" onerror="this.src='https://ui-avatars.com/api/?name=<?= $_SESSION['admin_username'] ?? 'A' ?>&background=E53E3E&color=fff'" class="h-8 w-8 rounded-full border border-gray-300 shadow-sm">
+                <img src="<?= BASEURL ?>/images/default.jpg" onerror="this.src='https://ui-avatars.com/api/?name=<?= urlencode($_SESSION['admin_username'] ?? 'A') ?>&background=E53E3E&color=fff'" class="h-8 w-8 rounded-full border border-gray-300 shadow-sm">
             </div>
         </header>
 

@@ -50,7 +50,7 @@ include '../app/views/layouts/admin_header.php';
                     <div class="flex items-center gap-4">
                         <div class="w-20 h-20 rounded-lg bg-slate-900 border border-slate-700 flex items-center justify-center text-slate-500 overflow-hidden" id="imagePreviewContainer">
                             <?php if(!empty($food['image_name'])): ?>
-                                <img src="<?= BASEURL ?>/uploads/foods/<?= htmlspecialchars($food['image_name']) ?>" class="w-full h-full object-cover">
+                                <img src="<?= BASEURL ?>/images/foods/<?= htmlspecialchars($food['image_name']) ?>" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=<?= urlencode($food['name']) ?>&background=random&color=fff'">
                             <?php else: ?>
                                 <i class="fas fa-image text-2xl"></i>
                             <?php endif; ?>

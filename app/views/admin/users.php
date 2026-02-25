@@ -24,7 +24,7 @@ include '../app/views/layouts/admin_header.php';
                     <tr class="hover:bg-gray-50 transition group">
                         <td class="px-6 py-4 text-sm text-gray-500 font-mono">#<?= $user['id'] ?></td>
                         <td class="px-6 py-4 font-bold text-gray-800 flex items-center gap-3">
-                            <img src="<?= BASEURL ?>/images/users/<?= htmlspecialchars($user['img_user'] ?? 'default.jpg') ?>" class="w-8 h-8 rounded-full border border-gray-200" onerror="this.src='https://ui-avatars.com/api/?name=<?= urlencode($user['username']) ?>&background=random'">
+                            <img src="<?= BASEURL ?>/images/users/<?= htmlspecialchars($user['img_user'] ?? 'default.jpg') ?>" class="w-8 h-8 rounded-full border border-gray-200" onerror="this.src='https://ui-avatars.com/api/?name=<?= urlencode($user['username']) ?>&background=random&color=fff'">
                             <?= htmlspecialchars($user['username']) ?>
                         </td>
                         <td class="px-6 py-4 text-sm text-gray-600"><?= htmlspecialchars($user['email']) ?></td>

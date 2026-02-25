@@ -103,7 +103,7 @@
                              data-description="<?= htmlspecialchars($food['description']) ?>">
                             <div class="relative h-64 overflow-hidden bg-gray-100">
                                 <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent group-hover:from-gray-900/60 transition-all z-10"></div>
-                                <img src="<?= BASEURL ?>/images/foods/<?= htmlspecialchars($food['image_name']) ?>" alt="<?= htmlspecialchars($food['name']) ?>" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-700 ease-in-out" onerror="this.src='https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80'">
+                                <img src="<?= BASEURL ?>/images/foods/<?= htmlspecialchars($food['image_name']) ?>" alt="<?= htmlspecialchars($food['name']) ?>" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-700 ease-in-out" onerror="this.src='https://ui-avatars.com/api/?name=<?= urlencode($food['name'] ?? 'Food') ?>&background=random&color=fff'">
                                 <div class="absolute bottom-4 left-4 z-20">
                                     <span class="bg-white text-secondary font-black px-4 py-1.5 rounded-full shadow-lg text-lg ring-4 ring-white/30 truncate block max-w-full">
                                         Rp <?= number_format($food['price'] ?? 0, 0, ',', '.') ?>
@@ -311,7 +311,7 @@
                      data-description="${escapeHtml(food.description)}">
                     <div class="relative h-64 overflow-hidden bg-gray-100">
                         <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent group-hover:from-gray-900/60 transition-all z-10"></div>
-                        <img src="${data.baseurl}/images/foods/${escapeHtml(food.image_name)}" alt="${escapeHtml(food.name)}" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-700 ease-in-out" onerror="this.src='https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80'">
+                        <img src="${data.baseurl}/images/foods/${escapeHtml(food.image_name)}" alt="${escapeHtml(food.name)}" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-700 ease-in-out" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(food.name)}&background=random&color=fff'">
                         <div class="absolute bottom-4 left-4 z-20">
                             <span class="bg-white text-secondary font-black px-4 py-1.5 rounded-full shadow-lg text-lg ring-4 ring-white/30 truncate block max-w-full">
                                 ${priceFormatted}
@@ -358,7 +358,7 @@
                 Swal.fire({
                     html: `
                         <div class="text-left mt-2">
-                            <img src="${img}" class="w-full h-64 object-cover rounded-2xl mb-6 shadow-sm bg-gray-100" alt="${name}" onerror="this.src='https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80'">
+                            <img src="${img}" class="w-full h-64 object-cover rounded-2xl mb-6 shadow-sm bg-gray-100" alt="${name}" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random&color=fff'">
                             <h2 class="text-2xl font-black text-gray-800 mb-2">${name}</h2>
                             <p class="text-primary font-bold text-xl mb-4">${price}</p>
                             <div class="w-12 h-1 bg-gray-200 rounded-full mb-4"></div>
