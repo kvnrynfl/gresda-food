@@ -1,0 +1,15 @@
+{
+    "name": "kvnrynfl/gresda-food",
+    "description": "Gresda Food Premium E-Commerce Platform",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "kvnrynfl",
+            "email": "kevinreynaufal2004@gmail.com"
+        }
+    ],
+    "require": {
+        "phpmailer/phpmailer": "^7.0"
+    }
+}

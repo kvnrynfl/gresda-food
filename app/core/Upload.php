@@ -1,60 +1,98 @@
 <?php
 
-class Upload {
-    private static $allowedMimeTypes = [
-        'jpg' => 'image/jpeg',
-        'png' => 'image/png',
-        'gif' => 'image/gif',
-        'webp' => 'image/webp'
+/**
+ * File Upload Handler
+ * 
+ * Handles secure image uploads with:
+ * - MIME type validation (using finfo, not just extension)
+ * - File size limits
+ * - Secure random filenames
+ * - Multiple upload directory support
+ */
+class Upload
+{
+    private static $allowedTypes = [
+        'image/jpeg' => 'jpg',
+        'image/png' => 'png',
+        'image/gif' => 'gif',
+        'image/webp' => 'webp',
     ];
-    private static $maxSize = 5 * 1024 * 1024; // 5 MB
+    private static $maxSize = 5242880; // 5MB
 
-    public static function image($file, $destinationDir) {
-        // Check if file was uploaded without errors
-        if (!isset($file['error']) || is_array($file['error'])) {
-            return ['status' => false, 'message' => 'Invalid parameters.'];
+    /**
+     * Upload an image file
+     * @param array $file $_FILES array element
+     * @param string $subdirectory Upload subdirectory (e.g., 'food', 'users', 'payment')
+     * @return string|false Filename on success, false on failure
+     */
+    public static function image($file, $subdirectory = '')
+    {
+        // Validate upload
+        if (!isset($file['tmp_name']) || !is_uploaded_file($file['tmp_name'])) {
+            return false;
         }
 
-        switch ($file['error']) {
-            case UPLOAD_ERR_OK:
-                break;
-            case UPLOAD_ERR_NO_FILE:
-                return ['status' => false, 'message' => 'No file sent.'];
-            case UPLOAD_ERR_INI_SIZE:
-            case UPLOAD_ERR_FORM_SIZE:
-                return ['status' => false, 'message' => 'Exceeded filesize limit.'];
-            default:
-                return ['status' => false, 'message' => 'Unknown errors.'];
-        }
-
+        // Check file size
         if ($file['size'] > self::$maxSize) {
-            return ['status' => false, 'message' => 'Exceeded filesize limit.'];
+            return false;
         }
 
-        // Verify MIME type using Fileinfo for true type checking
+        // Verify MIME type using finfo (not extension)
         $finfo = new finfo(FILEINFO_MIME_TYPE);
-        $ext = array_search(
-            $finfo->file($file['tmp_name']),
-            self::$allowedMimeTypes,
-            true
-        );
+        $mimeType = $finfo->file($file['tmp_name']);
 
-        if ($ext === false) {
-            return ['status' => false, 'message' => 'Invalid file format.'];
+        if (!isset(self::$allowedTypes[$mimeType])) {
+            return false;
         }
 
-        // Create secure filename
-        $fileName = sprintf('%s.%s', sha1_file($file['tmp_name']), $ext);
-        $uploadFilePath = $destinationDir . '/' . $fileName;
+        $extension = self::$allowedTypes[$mimeType];
 
-        if (!is_dir($destinationDir)) {
-            mkdir($destinationDir, 0755, true);
+        // Generate secure random filename
+        $filename = bin2hex(random_bytes(8)) . '_' . time() . '.' . $extension;
+
+        // Determine upload path
+        $uploadDir = __DIR__ . '/../../public/uploads';
+        if ($subdirectory) {
+            $uploadDir .= '/' . $subdirectory;
         }
 
-        if (move_uploaded_file($file['tmp_name'], $uploadFilePath)) {
-            return ['status' => true, 'filename' => $fileName];
+        // Create directory if needed
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0755, true);
         }
 
-        return ['status' => false, 'message' => 'Failed to move uploaded file.'];
+        $destination = $uploadDir . '/' . $filename;
+
+        // Move uploaded file
+        if (move_uploaded_file($file['tmp_name'], $destination)) {
+            return $filename;
+        }
+
+        return false;
+    }
+
+    /**
+     * Delete an uploaded file
+     * @param string $filename Filename to delete
+     * @param string $subdirectory Upload subdirectory
+     * @return bool
+     */
+    public static function delete($filename, $subdirectory = '')
+    {
+        if (empty($filename) || $filename === 'default.jpg') {
+            return false; // Don't delete default images
+        }
+
+        $path = __DIR__ . '/../../public/uploads';
+        if ($subdirectory) {
+            $path .= '/' . $subdirectory;
+        }
+        $path .= '/' . $filename;
+
+        if (file_exists($path)) {
+            return unlink($path);
+        }
+
+        return false;
     }
 }

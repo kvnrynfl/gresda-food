@@ -1,34 +1,103 @@
 <?php
 
-class Pagination {
-    public static function getLimitOffset($page, $limit) {
-        $page = (int)$page > 0 ? (int)$page : 1;
-        $offset = ($page - 1) * $limit;
-        return "LIMIT $limit OFFSET $offset";
+/**
+ * Pagination Helper
+ * 
+ * Generates pagination links and calculates offsets for paginated queries.
+ */
+class Pagination
+{
+    private $totalItems;
+    private $itemsPerPage;
+    private $currentPage;
+    private $totalPages;
+
+    public function __construct($totalItems, $itemsPerPage = 12, $currentPage = 1)
+    {
+        $this->totalItems = max(0, (int) $totalItems);
+        $this->itemsPerPage = max(1, (int) $itemsPerPage);
+        $this->currentPage = max(1, (int) $currentPage);
+        $this->totalPages = (int) ceil($this->totalItems / $this->itemsPerPage);
+
+        // Clamp current page
+        if ($this->currentPage > $this->totalPages && $this->totalPages > 0) {
+            $this->currentPage = $this->totalPages;
+        }
     }
 
-    public static function createLinks($totalRecords, $limit, $currentPage, $baseUrl) {
-        $totalPages = ceil($totalRecords / $limit);
-        if ($totalPages <= 1) return '';
+    public function getOffset()
+    {
+        return ($this->currentPage - 1) * $this->itemsPerPage;
+    }
 
-        $html = '<div class="pagination flex gap-2 justify-center mt-6">';
-        
-        if ($currentPage > 1) {
-            $prev = $currentPage - 1;
-            $html .= "<a href='{$baseUrl}?page={$prev}' class='px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300'>Prev</a>";
+    public function getLimit()
+    {
+        return $this->itemsPerPage;
+    }
+
+    public function getTotalPages()
+    {
+        return $this->totalPages;
+    }
+
+    public function getCurrentPage()
+    {
+        return $this->currentPage;
+    }
+
+    public function hasPrevious()
+    {
+        return $this->currentPage > 1;
+    }
+
+    public function hasNext()
+    {
+        return $this->currentPage < $this->totalPages;
+    }
+
+    /**
+     * Generate page links array
+     * @param string $baseUrl Base URL for pagination links
+     * @param int $adjacents Number of adjacent pages to show
+     * @return array Pagination data
+     */
+    public function getLinks($baseUrl = '', $adjacents = 2)
+    {
+        $links = [];
+        $start = max(1, $this->currentPage - $adjacents);
+        $end = min($this->totalPages, $this->currentPage + $adjacents);
+
+        // Previous
+        if ($this->hasPrevious()) {
+            $links[] = ['page' => $this->currentPage - 1, 'label' => '←', 'active' => false, 'url' => $baseUrl . ($this->currentPage - 1)];
         }
 
-        for ($i = 1; $i <= $totalPages; $i++) {
-            $activeClass = ($i == $currentPage) ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300';
-            $html .= "<a href='{$baseUrl}?page={$i}' class='px-4 py-2 rounded {$activeClass}'>{$i}</a>";
+        // First page + ellipsis
+        if ($start > 1) {
+            $links[] = ['page' => 1, 'label' => '1', 'active' => false, 'url' => $baseUrl . '1'];
+            if ($start > 2) {
+                $links[] = ['page' => null, 'label' => '...', 'active' => false, 'url' => ''];
+            }
         }
 
-        if ($currentPage < $totalPages) {
-            $next = $currentPage + 1;
-            $html .= "<a href='{$baseUrl}?page={$next}' class='px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300'>Next</a>";
+        // Page numbers
+        for ($i = $start; $i <= $end; $i++) {
+            $links[] = ['page' => $i, 'label' => (string)$i, 'active' => ($i === $this->currentPage), 'url' => $baseUrl . $i];
         }
 
-        $html .= '</div>';
-        return $html;
+        // Last page + ellipsis
+        if ($end < $this->totalPages) {
+            if ($end < $this->totalPages - 1) {
+                $links[] = ['page' => null, 'label' => '...', 'active' => false, 'url' => ''];
+            }
+            $links[] = ['page' => $this->totalPages, 'label' => (string)$this->totalPages, 'active' => false, 'url' => $baseUrl . $this->totalPages];
+        }
+
+        // Next
+        if ($this->hasNext()) {
+            $links[] = ['page' => $this->currentPage + 1, 'label' => '→', 'active' => false, 'url' => $baseUrl . ($this->currentPage + 1)];
+        }
+
+        return $links;
     }
 }

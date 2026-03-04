@@ -1,44 +1,63 @@
 <?php
 
-class Database {
-    private $host;
-    private $user;
-    private $pass;
-    private $dbname;
-
-    private $dbh; // Database Handler
-    private $stmt;
+/**
+ * Database Abstraction Layer (PDO Wrapper)
+ * 
+ * Enhanced with:
+ * - UTF-8mb4 charset support
+ * - Transaction support (begin, commit, rollback)
+ * - Removed persistent connections for better concurrency
+ * - Exception-based error handling
+ */
+class Database
+{
+    private $dbh;   // Database Handler (PDO instance)
+    private $stmt;  // Prepared Statement
     private $error;
 
-    public function __construct() {
-        $this->host = $_ENV['DB_HOST'] ?? 'localhost';
-        $this->user = $_ENV['DB_USER'] ?? 'root';
-        $this->pass = $_ENV['DB_PASS'] ?? '';
-        $this->dbname = $_ENV['DB_NAME'] ?? 'gresda-food';
+    public function __construct()
+    {
+        $host = $_ENV['DB_HOST'] ?? 'localhost';
+        $user = $_ENV['DB_USER'] ?? 'root';
+        $pass = $_ENV['DB_PASS'] ?? '';
+        $dbname = $_ENV['DB_NAME'] ?? 'gresda_food';
 
-        // DSN
-        $dsn = 'mysql:host=' . $this->host . ';dbname=' . $this->dbname;
-        $options = array(
-            PDO::ATTR_PERSISTENT => true,
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-        );
+        $dsn = "mysql:host={$host};dbname={$dbname};charset=utf8mb4";
 
-        // Create PDO instance
+        $options = [
+            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES   => false, // Use native prepared statements
+            PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci",
+        ];
+
         try {
-            $this->dbh = new PDO($dsn, $this->user, $this->pass, $options);
+            $this->dbh = new PDO($dsn, $user, $pass, $options);
         } catch (PDOException $e) {
             $this->error = $e->getMessage();
-            die("Database Connection Error: " . $this->error);
+
+            if (defined('APP_DEBUG') && APP_DEBUG) {
+                die("Database Connection Error: " . $this->error);
+            } else {
+                error_log("Database Connection Error: " . $this->error);
+                die("Terjadi kesalahan koneksi database. Silakan hubungi administrator.");
+            }
         }
     }
 
-    // Prepare statement with query
-    public function query($sql) {
+    /**
+     * Prepare statement with query
+     */
+    public function query($sql)
+    {
         $this->stmt = $this->dbh->prepare($sql);
     }
 
-    // Bind values
-    public function bind($param, $value, $type = null) {
+    /**
+     * Bind values to prepared statement
+     */
+    public function bind($param, $value, $type = null)
+    {
         if (is_null($type)) {
             switch (true) {
                 case is_int($value):
@@ -57,30 +76,79 @@ class Database {
         $this->stmt->bindValue($param, $value, $type);
     }
 
-    // Execute the prepared statement
-    public function execute() {
+    /**
+     * Execute the prepared statement
+     */
+    public function execute()
+    {
         return $this->stmt->execute();
     }
 
-    // Get result set as array of objects
-    public function resultSet() {
+    /**
+     * Get result set as array of associative arrays
+     */
+    public function resultSet()
+    {
         $this->execute();
         return $this->stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Get single record as object
-    public function single() {
+    /**
+     * Get single record as associative array
+     */
+    public function single()
+    {
         $this->execute();
         return $this->stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    // Get row count
-    public function rowCount() {
+    /**
+     * Get row count from last executed statement
+     */
+    public function rowCount()
+    {
         return $this->stmt->rowCount();
     }
 
-    // Get last inserted ID
-    public function lastInsertId() {
+    /**
+     * Get last inserted ID
+     */
+    public function lastInsertId()
+    {
         return $this->dbh->lastInsertId();
+    }
+
+    // ─── Transaction Support ────────────────────────────────────────
+
+    /**
+     * Begin a database transaction
+     */
+    public function beginTransaction()
+    {
+        return $this->dbh->beginTransaction();
+    }
+
+    /**
+     * Commit the current transaction
+     */
+    public function commit()
+    {
+        return $this->dbh->commit();
+    }
+
+    /**
+     * Rollback the current transaction
+     */
+    public function rollback()
+    {
+        return $this->dbh->rollBack();
+    }
+
+    /**
+     * Check if currently in a transaction
+     */
+    public function inTransaction()
+    {
+        return $this->dbh->inTransaction();
     }
 }

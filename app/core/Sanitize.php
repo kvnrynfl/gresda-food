@@ -1,25 +1,57 @@
 <?php
 
-class Sanitize {
-    // Sanitize string (removes tags, encodes special chars)
-    public static function string($value) {
-        return htmlspecialchars(strip_tags(trim($value)), ENT_QUOTES, 'UTF-8');
+/**
+ * Input Sanitization Helper
+ * 
+ * Provides methods for sanitizing user input to prevent XSS attacks
+ * and ensure data integrity.
+ */
+class Sanitize
+{
+    /**
+     * Sanitize a string value
+     */
+    public static function string($value)
+    {
+        $value = trim($value);
+        $value = stripslashes($value);
+        $value = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+        return $value;
     }
 
-    // Sanitize email
-    public static function email($value) {
-        return filter_var(trim($value), FILTER_SANITIZE_EMAIL);
+    /**
+     * Sanitize an email address
+     */
+    public static function email($value)
+    {
+        $value = trim($value);
+        $value = filter_var($value, FILTER_SANITIZE_EMAIL);
+        return $value;
     }
 
-    // Sanitize integer
-    public static function int($value) {
-        return filter_var(trim($value), FILTER_SANITIZE_NUMBER_INT);
+    /**
+     * Sanitize an integer
+     */
+    public static function int($value)
+    {
+        return (int) filter_var($value, FILTER_SANITIZE_NUMBER_INT);
     }
 
-    // Sanitize array recursively
-    public static function array($array) {
+    /**
+     * Sanitize a float
+     */
+    public static function float($value)
+    {
+        return (float) filter_var($value, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+    }
+
+    /**
+     * Sanitize all values in an array (recursive)
+     */
+    public static function array($data)
+    {
         $sanitized = [];
-        foreach ($array as $key => $value) {
+        foreach ($data as $key => $value) {
             if (is_array($value)) {
                 $sanitized[$key] = self::array($value);
             } else {
@@ -27,5 +59,21 @@ class Sanitize {
             }
         }
         return $sanitized;
+    }
+
+    /**
+     * Sanitize a URL
+     */
+    public static function url($value)
+    {
+        return filter_var(trim($value), FILTER_SANITIZE_URL);
+    }
+
+    /**
+     * Strip all HTML tags from a string
+     */
+    public static function stripTags($value)
+    {
+        return strip_tags(trim($value));
     }
 }
