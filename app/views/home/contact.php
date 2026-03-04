@@ -55,7 +55,7 @@
             <!-- Contact Form -->
             <div class="md:col-span-2 bg-white p-10 rounded-2xl shadow-lg" data-aos="fade-left" data-aos-delay="200" data-aos-duration="800">
                 <h3 class="text-3xl font-extrabold text-secondary mb-6">Kirim Pesan</h3>
-                <form action="<?= BASEURL ?>/contact/submit" method="POST" class="space-y-6">
+                <form action="<?= BASEURL ?>/contact/send" method="POST" class="space-y-6">
                     <?= CSRF::getTokenField() ?>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <div>
@@ -66,6 +66,10 @@
                             <label class="block text-sm font-medium text-gray-700 mb-2">Alamat Email</label>
                             <input type="email" name="email" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-primary focus:border-primary transition" placeholder="budi@example.com" required>
                         </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Subjek</label>
+                        <input type="text" name="subject" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-primary focus:border-primary transition" placeholder="Pertanyaan mengenai..." required>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Pesan</label>

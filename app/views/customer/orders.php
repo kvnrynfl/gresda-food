@@ -8,17 +8,17 @@ ob_start();
 <!-- Filter Tabs -->
 <div class="flex overflow-x-auto gap-2 mb-6 pb-2 hide-scrollbar">
     <button onclick="filterOrders('all', this)" class="order-filter-btn flex-shrink-0 px-5 py-2.5 rounded-full text-sm font-bold transition-all bg-primary text-white shadow-md">Semua Pesanan</button>
-    <button onclick="filterOrders('Payment', this)" class="order-filter-btn flex-shrink-0 px-5 py-2.5 rounded-full text-sm font-bold bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 transition-all">Belum Dibayar</button>
+    <button onclick="filterOrders('pending_payment', this)" class="order-filter-btn flex-shrink-0 px-5 py-2.5 rounded-full text-sm font-bold bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 transition-all">Belum Dibayar</button>
     <button onclick="filterOrders('active', this)" class="order-filter-btn flex-shrink-0 px-5 py-2.5 rounded-full text-sm font-bold bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 transition-all">Sedang Diproses</button>
-    <button onclick="filterOrders('Finished', this)" class="order-filter-btn flex-shrink-0 px-5 py-2.5 rounded-full text-sm font-bold bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 transition-all">Selesai</button>
-    <button onclick="filterOrders('Canceled', this)" class="order-filter-btn flex-shrink-0 px-5 py-2.5 rounded-full text-sm font-bold bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 transition-all">Dibatalkan</button>
+    <button onclick="filterOrders('finished', this)" class="order-filter-btn flex-shrink-0 px-5 py-2.5 rounded-full text-sm font-bold bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 transition-all">Selesai</button>
+    <button onclick="filterOrders('cancelled', this)" class="order-filter-btn flex-shrink-0 px-5 py-2.5 rounded-full text-sm font-bold bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 transition-all">Dibatalkan</button>
 </div>
 
 <div class="space-y-6" id="orders-list">
     <?php if(!empty($orders)): foreach($orders as $order): ?>
         <?php 
         $filterType = $order['status'];
-        if(in_array($order['status'], ['Confirmed', 'Delivery'])) $filterType = 'active';
+        if(in_array($order['status'], ['confirmed', 'processing', 'delivering'])) $filterType = 'active';
         ?>
         <div class="order-item transition-all duration-300 transform origin-top" data-filter="<?= htmlspecialchars($filterType) ?>">
             <?php ob_start(); ?>
@@ -29,33 +29,33 @@ ob_start();
                                 <i class="fas fa-receipt"></i>
                             </div>
                             <div>
-                                <p class="text-sm text-gray-500 font-medium">ID Pesanan</p>
-                                <h3 class="text-xl font-bold text-gray-900 group-hover:text-primary transition-colors">#<?= htmlspecialchars($order['order_id']) ?></h3>
+                                <p class="text-sm text-gray-500 font-medium">No. Pesanan</p>
+                                <h3 class="text-xl font-bold text-gray-900 group-hover:text-primary transition-colors"><?= htmlspecialchars($order['order_number'] ?? substr($order['id'], 0, 8)) ?></h3>
                             </div>
                         </div>
                         <p class="text-sm text-gray-500 flex items-center gap-2 mt-4 md:mt-0">
                             <i class="far fa-clock"></i> <?= date('d M Y - H:i', strtotime($order['created_at'])) ?>
                         </p>
                     </div>
-                    <div class="flex items-center">
+                    <div>
                         <?php 
                             $statusVariant = 'gray';
                             $statusIcon = 'fas fa-clock';
                             $statusMap = [
-                                'Cart' => 'Keranjang',
-                                'Payment' => 'Menunggu Pembayaran',
-                                'Confirmed' => 'Dikonfirmasi',
-                                'Delivery' => 'Sedang Dikirim',
-                                'Finished' => 'Selesai',
-                                'Canceled' => 'Dibatalkan'
+                                'pending_payment' => 'Menunggu Pembayaran',
+                                'confirmed' => 'Dikonfirmasi',
+                                'processing' => 'Sedang Diproses',
+                                'delivering' => 'Sedang Dikirim',
+                                'finished' => 'Selesai',
+                                'cancelled' => 'Dibatalkan'
                             ];
                             switch($order['status']) {
-                                case 'Cart': $statusVariant = 'gray'; $statusIcon = 'fas fa-shopping-cart'; break;
-                                case 'Payment': $statusVariant = 'info'; $statusIcon = 'fas fa-wallet'; break;
-                                case 'Confirmed': $statusVariant = 'info'; $statusIcon = 'fas fa-check-circle'; break;
-                                case 'Delivery': $statusVariant = 'warning'; $statusIcon = 'fas fa-motorcycle'; break;
-                                case 'Finished': $statusVariant = 'success'; $statusIcon = 'fas fa-flag-checkered'; break;
-                                case 'Canceled': $statusVariant = 'danger'; $statusIcon = 'fas fa-times-circle'; break;
+                                case 'pending_payment': $statusVariant = 'info'; $statusIcon = 'fas fa-wallet'; break;
+                                case 'confirmed': $statusVariant = 'info'; $statusIcon = 'fas fa-check-circle'; break;
+                                case 'processing': $statusVariant = 'warning'; $statusIcon = 'fas fa-cog'; break;
+                                case 'delivering': $statusVariant = 'warning'; $statusIcon = 'fas fa-motorcycle'; break;
+                                case 'finished': $statusVariant = 'success'; $statusIcon = 'fas fa-flag-checkered'; break;
+                                case 'cancelled': $statusVariant = 'danger'; $statusIcon = 'fas fa-times-circle'; break;
                             }
                             $statusText = $statusMap[$order['status']] ?? $order['status'];
                             
@@ -68,29 +68,17 @@ ob_start();
                 <div class="flex flex-col md:flex-row justify-between items-center gap-6">
                     <div class="w-full md:w-auto text-left">
                         <p class="text-sm text-gray-500 font-medium mb-1">Total Pembayaran</p>
-                        <p class="text-3xl font-black text-gray-800">Rp <?= number_format($order['total'] ?? 0, 0, ',', '.') ?></p>
+                        <p class="text-3xl font-black text-gray-800">Rp <?= number_format($order['grand_total'] ?? 0, 0, ',', '.') ?></p>
                     </div>
                     <div class="w-full md:w-auto flex flex-col sm:flex-row gap-3">
-                        <?php if($order['status'] === 'Payment'): ?>
+                        <?php if($order['status'] === 'pending_payment'): ?>
                             <?php 
                             $props = [
                                 'text' => 'Bayar Sekarang', 
                                 'type' => 'a', 
-                                'href' => BASEURL . '/customer/payment/' . urlencode($order['order_id']), 
+                                'href' => BASEURL . '/customer/payment/' . urlencode($order['id']), 
                                 'variant' => 'danger', 
                                 'icon' => 'fas fa-wallet', 
-                                'class' => 'w-full sm:w-auto'
-                            ];
-                            include '../app/views/components/ui/button.php';
-                            ?>
-                        <?php elseif($order['status'] === 'Finished'): ?>
-                            <?php 
-                            $props = [
-                                'text' => 'Beri Ulasan', 
-                                'type' => 'a', 
-                                'href' => BASEURL . '/customer/reviews', 
-                                'variant' => 'primary', 
-                                'icon' => 'fas fa-star', 
                                 'class' => 'w-full sm:w-auto'
                             ];
                             include '../app/views/components/ui/button.php';
@@ -100,7 +88,7 @@ ob_start();
                         $props = [
                             'text' => 'Detail', 
                             'type' => 'a', 
-                            'href' => BASEURL . '/customer/orderDetails/' . urlencode($order['order_id']), 
+                            'href' => BASEURL . '/customer/orderDetails/' . urlencode($order['id']), 
                             'variant' => 'outline', 
                             'class' => 'w-full sm:w-auto'
                         ];
@@ -135,7 +123,6 @@ ob_start();
 
 <script>
 function filterOrders(filter, btn) {
-    // Handle active state on buttons
     document.querySelectorAll('.order-filter-btn').forEach(b => {
         b.classList.remove('bg-primary', 'text-white', 'shadow-md');
         b.classList.add('bg-white', 'text-gray-600');
@@ -143,7 +130,6 @@ function filterOrders(filter, btn) {
     btn.classList.add('bg-primary', 'text-white', 'shadow-md');
     btn.classList.remove('bg-white', 'text-gray-600');
 
-    // Handle filtering
     const items = document.querySelectorAll('.order-item');
     items.forEach(item => {
         if(filter === 'all' || item.dataset.filter === filter) {

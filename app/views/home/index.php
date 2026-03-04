@@ -1,3 +1,4 @@
+<?php $title = 'Home'; ?>
 <?php include '../app/views/layouts/header.php'; ?>
 
 <!-- Hero Section -->
@@ -94,13 +95,13 @@
             </button>
 
             <div id="menu-scroll-container" class="flex overflow-x-auto gap-6 pb-8 hide-scrollbar pt-4 px-2">
-                <?php if (isset($data['topFoods']) && count($data['topFoods']) > 0): ?>
-                    <?php $delay = 100; foreach ($data['topFoods'] as $food): ?>
+                <?php if (isset($topFoods) && count($topFoods) > 0): ?>
+                    <?php $delay = 100; foreach ($topFoods as $food): ?>
                         <div class="min-w-[300px] sm:min-w-[350px] w-[300px] sm:w-[350px] flex-shrink-0 snap-start bg-white rounded-2xl shadow-sm hover:shadow-xl transition flex flex-col overflow-hidden group" data-aos="zoom-in" data-aos-delay="<?= $delay ?>">
                             <div class="relative h-56 overflow-hidden">
                                 <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition z-10"></div>
                                 <?php 
-                                    $imgUrl = BASEURL . '/images/foods/' . htmlspecialchars($food['image_name']);
+                                    $imgUrl = BASEURL . '/uploads/food/' . htmlspecialchars($food['image']);
                                 ?>
                                 <img src="<?= $imgUrl ?>" alt="<?= htmlspecialchars($food['name']) ?>" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" onerror="this.src='https://ui-avatars.com/api/?name=<?= urlencode($food['name']) ?>&background=random&color=fff'">
                                 <span class="absolute top-4 right-4 bg-white text-secondary font-bold px-3 py-1 rounded-full shadow z-20">Rp <?= number_format($food['price'] ?? 0, 0, ',', '.') ?></span>
@@ -110,7 +111,8 @@
                                 <p class="text-gray-500 text-sm mb-4 line-clamp-3 flex-grow"><?= htmlspecialchars($food['description']) ?></p>
                                 <div class="mt-auto">
                                     <form action="<?= BASEURL ?>/customer/addToCart" method="POST">
-                                        <input type="hidden" name="food_id" value="<?= $food['food_id'] ?>">
+                                        <?= CSRF::getTokenField() ?>
+                                        <input type="hidden" name="food_id" value="<?= $food['id'] ?>">
                                         <input type="hidden" name="qty" value="1">
                                         <button type="submit" class="w-full py-3 border-2 border-primary text-primary font-semibold rounded-xl hover:bg-primary hover:text-white transition flex items-center justify-center gap-2">
                                             <i class="fas fa-plus"></i> Tambah ke Keranjang
@@ -129,7 +131,7 @@
 </section>
 
 <!-- Customer Reviews Section -->
-<?php if (isset($data['reviews']) && count($data['reviews']) > 0): ?>
+<?php if (isset($reviews) && count($reviews) > 0): ?>
 <section id="reviews" class="py-24 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16" data-aos="fade-down" data-aos-duration="800">
@@ -147,7 +149,7 @@
             </button>
 
             <div id="review-scroll-container" class="flex overflow-x-auto gap-6 pb-8 pt-4 px-4 hide-scrollbar">
-                <?php $rDelay=100; foreach ($data['reviews'] as $review): ?>
+                <?php $rDelay=100; foreach ($reviews as $review): ?>
                 <div class="min-w-[300px] md:min-w-[400px] w-[300px] md:w-[400px] flex-shrink-0 snap-center bg-white rounded-2xl p-8 shadow-sm border border-gray-100 hover:shadow-xl transition flex flex-col" data-aos="fade-up" data-aos-delay="<?= $rDelay ?>">
                     <div class="flex items-center gap-1 mb-4 text-yellow-500">
                         <?php 

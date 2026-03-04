@@ -1,16 +1,19 @@
 <?php
 
-class HomeController extends Controller {
-    public function index() {
-        $data['title'] = 'Home';
-        // Get top 10 most ordered menus
+/**
+ * Home Controller
+ */
+class HomeController extends Controller
+{
+    public function index()
+    {
         $foodModel = $this->model('FoodModel');
-        $data['topFoods'] = $foodModel->getTopSelling(10);
-        
-        // Get active customer reviews
         $reviewModel = $this->model('ReviewModel');
-        $data['reviews'] = $reviewModel->getActive();
-        
-        $this->view('home/index', $data);
+
+        $this->view('home/index', [
+            'topFoods' => $foodModel->getTopSelling(8),
+            'reviews' => $reviewModel->getApproved(),
+            'avgRating' => $reviewModel->getAverageRating(),
+        ]);
     }
 }

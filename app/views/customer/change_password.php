@@ -5,23 +5,23 @@ $hide_card = true;
 ob_start(); 
 ?>
 
-<div class="bg-gray-50 min-h-screen py-12">
+<div class="bg-gray-50 min-h-screen">
     <div class="container mx-auto px-4 max-w-xl">
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-            <div class="p-6 border-b border-gray-100 flex items-center gap-3">
+            <!-- <div class="p-6 border-b border-gray-100 flex items-center gap-3">
                 <a href="<?= BASEURL ?>/customer/editProfile" class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-500 hover:bg-gray-100 transition">
                     <i class="fas fa-arrow-left"></i>
                 </a>
                 <h2 class="text-2xl font-bold text-gray-800">Keamanan</h2>
-            </div>
+            </div> -->
             
             <div class="p-8">
-                <?php if(isset($error)): ?>
+                <?php if(!empty($error)): ?>
                     <div class="bg-cyan-50 text-primary p-4 rounded-lg mb-6 flex items-center gap-3">
                         <i class="fas fa-exclamation-circle text-xl"></i> <?= htmlspecialchars($error) ?>
                     </div>
                 <?php endif; ?>
-                <?php if(isset($success)): ?>
+                <?php if(!empty($success)): ?>
                     <div class="bg-green-50 text-green-600 p-4 rounded-lg mb-6 flex items-center gap-3">
                         <i class="fas fa-check-circle text-xl"></i> <?= htmlspecialchars($success) ?>
                     </div>

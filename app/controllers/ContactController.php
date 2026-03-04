@@ -1,35 +1,56 @@
 <?php
 
-class ContactController extends Controller {
-
-    public function index() {
-        $data['title'] = 'Contact Us | Gresda Food & Beverage';
-        $this->view('home/contact', $data);
+/**
+ * Contact Controller
+ */
+class ContactController extends Controller
+{
+    public function index()
+    {
+        $this->view('home/contact', [
+            'success' => $this->getFlash('success'),
+            'error' => '',
+        ]);
     }
 
-    public function submit() {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            if (!isset($_POST['csrf_token']) || !CSRF::verifyToken($_POST['csrf_token'])) {
-                $_SESSION['flash_error'] = "Token tidak valid atau kedaluwarsa. Silakan coba lagi.";
-                $this->redirect('/contact');
-                exit;
-            }
-            
-            $data = [
-                'name' => trim($_POST['name'] ?? ''),
-                'email' => trim($_POST['email'] ?? ''),
-                'message' => trim($_POST['message'] ?? '')
-            ];
-            
-            $contactModel = $this->model('ContactModel');
-            if ($contactModel->create($data)) {
-                $_SESSION['flash_success'] = "Pesan Anda berhasil dikirim! Kami akan segera menghubungi Anda.";
-            } else {
-                $_SESSION['flash_error'] = "Gagal mengirim pesanan. Silakan coba lagi nanti.";
-            }
+    public function send()
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             $this->redirect('/contact');
-        } else {
-            $this->redirect('/contact');
+            return;
         }
+
+        if (!CSRF::verifyToken($_POST['csrf_token'] ?? '')) {
+            $this->view('home/contact', ['error' => 'Sesi tidak valid.', 'success' => '']);
+            return;
+        }
+
+        $_POST = Sanitize::array($_POST);
+
+        $name = trim($_POST['name'] ?? '');
+        $email = trim($_POST['email'] ?? '');
+        $subject = trim($_POST['subject'] ?? '');
+        $message = trim($_POST['message'] ?? '');
+
+        if (empty($name) || empty($email) || empty($message)) {
+            $this->view('home/contact', ['error' => 'Nama, email, dan pesan wajib diisi.', 'success' => '']);
+            return;
+        }
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $this->view('home/contact', ['error' => 'Format email tidak valid.', 'success' => '']);
+            return;
+        }
+
+        $contactModel = $this->model('ContactModel');
+        $contactModel->create([
+            'name' => $name,
+            'email' => $email,
+            'subject' => $subject,
+            'message' => $message,
+        ]);
+
+        $this->flash('success', 'Pesan berhasil dikirim. Terima kasih atas masukan Anda!');
+        $this->redirect('/contact');
     }
 }

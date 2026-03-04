@@ -51,7 +51,6 @@
 </button>
 
 <script>
-    const baseUrl = '<?= BASEURL ?>';
 
     // Back to top functionality
     document.addEventListener('DOMContentLoaded', () => {

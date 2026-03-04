@@ -1,9 +1,11 @@
 <?php
-
-class AboutController extends Controller {
-
-    public function index() {
-        $data['title'] = 'About Us | Gresda Food & Beverage';
-        $this->view('home/about', $data);
+/**
+ * About Controller — Static page
+ */
+class AboutController extends Controller
+{
+    public function index()
+    {
+        $this->view('home/about');
     }
 }

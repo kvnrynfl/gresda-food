@@ -6,17 +6,13 @@ ob_start();
 ?>
 
 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-    <div class="p-6 border-b border-gray-100 flex items-center justify-between">
-        <h2 class="text-2xl font-bold text-gray-800">Nilai Pengalaman Anda</h2>
-    </div>
-    
     <div class="p-8">
-        <?php if(isset($error)): ?>
+        <?php if(!empty($error)): ?>
             <div class="bg-cyan-50 text-primary p-4 rounded-lg mb-6 flex items-center gap-3 animate-pulse">
                 <i class="fas fa-exclamation-circle text-xl"></i> <?= htmlspecialchars($error) ?>
             </div>
         <?php endif; ?>
-        <?php if(isset($success)): ?>
+        <?php if(!empty($success)): ?>
             <div class="bg-green-50 text-green-600 p-4 rounded-lg mb-6 flex items-center gap-3">
                 <i class="fas fa-check-circle text-xl"></i> <?= htmlspecialchars($success) ?>
             </div>

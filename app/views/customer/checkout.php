@@ -16,7 +16,7 @@ ob_start();
             <div class="grid grid-cols-1 gap-6">
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-2">Alamat Lengkap Pengiriman</label>
-                    <textarea name="address" rows="3" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition" placeholder="Masukkan alamat lengkap pengiriman beserta patokan jalan..."></textarea>
+                    <textarea name="shipping_address" rows="3" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition" placeholder="Masukkan alamat lengkap pengiriman beserta patokan jalan..."></textarea>
                 </div>
             </div>
         </div>
@@ -26,12 +26,12 @@ ob_start();
             <h3 class="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2"><i class="fas fa-wallet text-primary"></i> Metode Pembayaran</h3>
             
             <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
-                <?php if(isset($data['payment_methods']) && !empty($data['payment_methods'])): foreach($data['payment_methods'] as $index => $pm): ?>
+                <?php if(isset($payment_methods) && !empty($payment_methods)): foreach($payment_methods as $index => $pm): ?>
                 <label class="relative border border-gray-200 rounded-2xl p-4 flex flex-col items-center cursor-pointer hover:border-primary peer-checked:border-primary peer-checked:bg-cyan-50 peer-checked:shadow-md transition-all group">
-                    <input type="radio" name="payment_method" value="<?= htmlspecialchars($pm['metode']) ?>" data-rek="<?= htmlspecialchars($pm['rekening_number']) ?>" data-an="<?= htmlspecialchars($pm['an']) ?>" class="absolute opacity-0 peer payment-radio" required <?php echo ($index == 0) ? 'checked' : ''; ?>>
+                    <input type="radio" name="payment_method_id" value="<?= htmlspecialchars($pm['id']) ?>" data-rek="<?= htmlspecialchars($pm['account_number']) ?>" data-an="<?= htmlspecialchars($pm['account_name']) ?>" class="absolute opacity-0 peer payment-radio" required <?php echo ($index == 0) ? 'checked' : ''; ?>>
                     <div class="w-full h-full absolute inset-0 rounded-2xl border-2 border-transparent peer-checked:border-primary pointer-events-none group-hover:bg-cyan-50/30 transition-colors"></div>
-                    <img src="<?= BASEURL ?>/images/payment/<?= htmlspecialchars($pm['image_name']) ?>" alt="<?= htmlspecialchars($pm['metode']) ?>" class="h-8 mb-2 object-contain scale-95 peer-checked:scale-105 transition-transform" onerror="this.src='https://ui-avatars.com/api/?name=<?= urlencode($pm['metode']) ?>&background=random&color=fff'">
-                    <span class="text-sm font-medium text-gray-700 text-center mt-2"><?= htmlspecialchars($pm['metode']) ?></span>
+                    <img src="<?= BASEURL ?>/uploads/payment-methods/<?= htmlspecialchars($pm['icon'] ?? '') ?>" alt="<?= htmlspecialchars($pm['name']) ?>" class="h-8 mb-2 object-contain scale-95 peer-checked:scale-105 transition-transform" onerror="this.src='https://ui-avatars.com/api/?name=<?= urlencode($pm['name']) ?>&background=random&color=fff'">
+                    <span class="text-sm font-medium text-gray-700 text-center mt-2"><?= htmlspecialchars($pm['name']) ?></span>
                 </label>
                 <?php endforeach; else: ?>
                     <div class="col-span-full text-center text-red-500 py-4 bg-red-50 rounded-lg">
@@ -78,19 +78,19 @@ document.addEventListener('DOMContentLoaded', function() {
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 overflow-hidden">
             <h3 class="text-lg font-bold text-gray-800 mb-4 border-b border-gray-100 pb-3 flex items-center justify-between">
                 <span>Ringkasan Pesanan</span>
-                <span class="text-sm font-semibold text-primary"><?= count($data['checkout_items'] ?? []) ?> Item</span>
+                <span class="text-sm font-semibold text-primary"><?= count($checkout_items ?? []) ?> Item</span>
             </h3>
             <div class="space-y-4 max-h-64 overflow-y-auto pr-2 mb-4">
                 <?php 
                 $totalPrice = 0;
-                if(isset($data['checkout_items']) && !empty($data['checkout_items'])): 
-                    foreach($data['checkout_items'] as $item): 
+                if(isset($checkout_items) && !empty($checkout_items)): 
+                    foreach($checkout_items as $item): 
                         $sub = $item['price'] * $item['qty'];
                         $totalPrice += $sub;
                 ?>
                     <div class="flex gap-3">
                         <div class="w-12 h-12 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
-                            <img src="<?= BASEURL ?>/images/foods/<?= htmlspecialchars($item['image_name']) ?>" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=<?= urlencode($item['name']) ?>&background=random&color=fff'">
+                            <img src="<?= BASEURL ?>/uploads/food/<?= htmlspecialchars($item['image']) ?>" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=<?= urlencode($item['name']) ?>&background=random&color=fff'">
                         </div>
                         <div class="flex-1">
                             <h4 class="text-sm font-bold text-gray-800 line-clamp-1"><?= htmlspecialchars($item['name']) ?></h4>
@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <?php 
                 endif; 
                 $tax = $totalPrice * 0.1;
-                $shipping = isset($data['checkout_items']) && count($data['checkout_items']) > 0 ? 15000 : 0;
+                $shipping = isset($checkout_items) && count($checkout_items) > 0 ? 15000 : 0;
                 $grandTotal = $totalPrice + $tax + $shipping;
                 ?>
             </div>

@@ -12,12 +12,12 @@ $totalSpent = 0;
 
 if(is_array($recent_orders)) {
     foreach($recent_orders as $o) {
-        if(in_array($o['status'], ['Cart', 'Payment', 'Confirmed', 'Delivery'])) {
+        if(in_array($o['status'], ['pending_payment', 'confirmed', 'processing', 'delivering'])) {
             $activeOrders++;
         }
-        if($o['status'] === 'Finished') {
+        if($o['status'] === 'finished') {
             $finishedOrders++;
-            $totalSpent += ($o['total'] ?? 0);
+            $totalSpent += ($o['grand_total'] ?? 0);
         }
     }
 }
@@ -105,35 +105,36 @@ if(is_array($recent_orders)) {
                 foreach($displayOrders as $order): 
                     $statusClass = 'text-gray-500 bg-gray-100';
                     $statusMap = [
-                        'Cart' => 'Keranjang',
-                        'Payment' => 'Pembayaran',
-                        'Confirmed' => 'Dikonfirmasi',
-                        'Delivery' => 'Dikirim',
-                        'Finished' => 'Selesai',
-                        'Canceled' => 'Dibatalkan'
+                        'pending_payment' => 'Pembayaran',
+                        'confirmed' => 'Dikonfirmasi',
+                        'processing' => 'Diproses',
+                        'delivering' => 'Dikirim',
+                        'finished' => 'Selesai',
+                        'cancelled' => 'Dibatalkan'
                     ];
                     switch($order['status']) {
-                        case 'Payment': $statusClass = 'text-blue-700 bg-blue-100'; break;
-                        case 'Confirmed': $statusClass = 'text-indigo-700 bg-indigo-100'; break;
-                        case 'Delivery': $statusClass = 'text-orange-700 bg-orange-100'; break;
-                        case 'Finished': $statusClass = 'text-green-700 bg-green-100'; break;
-                        case 'Canceled': $statusClass = 'text-cyan-700 bg-cyan-100'; break;
+                        case 'pending_payment': $statusClass = 'text-blue-700 bg-blue-100'; break;
+                        case 'confirmed': $statusClass = 'text-indigo-700 bg-indigo-100'; break;
+                        case 'processing': $statusClass = 'text-violet-700 bg-violet-100'; break;
+                        case 'delivering': $statusClass = 'text-orange-700 bg-orange-100'; break;
+                        case 'finished': $statusClass = 'text-green-700 bg-green-100'; break;
+                        case 'cancelled': $statusClass = 'text-red-700 bg-red-100'; break;
                     }
                     $statusText = $statusMap[$order['status']] ?? $order['status'];
                 ?>
-                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl border border-gray-100 hover:bg-cyan-50 transition cursor-pointer group" onclick="window.location.href='<?= BASEURL ?>/customer/orderDetails/<?= urlencode($order['order_id']) ?>'">
+                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl border border-gray-100 hover:bg-cyan-50 transition cursor-pointer group" onclick="window.location.href='<?= BASEURL ?>/customer/orderDetails/<?= urlencode($order['id']) ?>'">
                     <div class="flex items-center gap-4">
                         <div class="w-12 h-12 bg-white rounded-lg shadow-sm flex items-center justify-center text-primary border border-gray-200 group-hover:border-cyan-200">
                             <i class="fas fa-shopping-bag text-xl"></i>
                         </div>
                         <div>
-                            <h4 class="font-bold text-gray-800">Pesanan #<?= htmlspecialchars($order['order_id']) ?></h4>
-                            <p class="text-xs text-gray-500"><?= date('d M Y', strtotime($order['tgl_order'] ?? 'now')) ?></p>
+                            <h4 class="font-bold text-gray-800">Pesanan <?= htmlspecialchars($order['order_number'] ?? substr($order['id'], 0, 8)) ?></h4>
+                            <p class="text-xs text-gray-500"><?= date('d M Y', strtotime($order['created_at'] ?? 'now')) ?></p>
                         </div>
                     </div>
                     <div class="text-right">
                         <span class="inline-block px-3 py-1 <?= $statusClass ?> rounded-full text-xs font-bold mb-1"><?= htmlspecialchars($statusText) ?></span>
-                        <p class="font-bold text-gray-800">Rp <?= number_format($order['total'] ?? 0, 0, ',', '.') ?></p>
+                        <p class="font-bold text-gray-800">Rp <?= number_format($order['grand_total'] ?? 0, 0, ',', '.') ?></p>
                     </div>
                 </div>
                 <?php endforeach; ?>

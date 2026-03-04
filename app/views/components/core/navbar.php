@@ -32,7 +32,7 @@
                             $userOrders = $om->getOrdersByUser($_SESSION['user_id']);
                             if(!empty($userOrders)){
                                 foreach($userOrders as $o) {
-                                    if($o['status'] === 'Payment') {
+                                    if($o['status'] === 'pending_payment') {
                                         $hasPendingPayment = true;
                                         break;
                                     }
@@ -58,11 +58,11 @@
                                     <span class="absolute top-0 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border border-white"></span>
                                 <?php endif; ?>
                             </div>
-                            <?= $_SESSION['username'] ?? $_SESSION['admin_username'] ?>
+                            <?= $_SESSION['username'] ?? '' ?>
                         </button>
                         <div class="absolute right-0 w-64 mt-2 bg-white border border-gray-100 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top-right scale-95 group-hover:scale-100 z-50">
                             <div class="px-5 py-4 border-b border-gray-50 bg-gray-50/50 rounded-t-xl">
-                                <p class="text-sm font-bold text-gray-900 truncate"><?= htmlspecialchars($_SESSION['username'] ?? $_SESSION['admin_username']) ?></p>
+                                <p class="text-sm font-bold text-gray-900 truncate"><?= htmlspecialchars($_SESSION['username'] ?? '') ?></p>
                                 <p class="text-xs text-gray-500 truncate flex items-center gap-1 mt-1"><i class="fas fa-check-circle text-green-500"></i> <?= $_SESSION['role'] === 'admin' ? 'Akun Administrator' : 'Akun Pelanggan' ?></p>
                             </div>
                             <div class="py-2">

@@ -25,7 +25,7 @@
                 <!-- Search Box -->
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6" data-aos="fade-right" data-aos-delay="100">
                     <h3 class="text-sm font-bold text-gray-800 uppercase tracking-widest mb-4">Cari Menu</h3>
-                    <form id="search-form" action="<?= BASEURL ?>/menu/fetchFoods" method="GET">
+                    <form id="search-form" action="<?= BASEURL ?>/menu/getFood" method="GET">
                         <div class="relative">
                             <input type="text" id="search-input" name="q" value="<?= htmlspecialchars($search_keyword ?? '') ?>" placeholder="Cari nama atau deskripsi..." class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:bg-white transition text-sm">
                             <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
@@ -44,7 +44,7 @@
                             Semua Menu
                         </a>
                         <?php foreach($categories as $cat): ?>
-                            <a href="javascript:void(0)" data-category="<?= htmlspecialchars($cat['category']) ?>" class="category-link flex-shrink-0 block px-4 py-3 rounded-xl text-sm font-medium transition <?= ($active_category === $cat['category']) ? 'bg-primary text-white shadow-md' : 'text-gray-600 hover:bg-cyan-50 hover:text-cyan-700' ?>">
+                            <a href="javascript:void(0)" data-category="<?= htmlspecialchars($cat['slug']) ?>" class="category-link flex-shrink-0 block px-4 py-3 rounded-xl text-sm font-medium transition <?= ($active_category === $cat['slug']) ? 'bg-primary text-white shadow-md' : 'text-gray-600 hover:bg-cyan-50 hover:text-cyan-700' ?>">
                                 <?= htmlspecialchars($cat['name']) ?>
                             </a>
                         <?php endforeach; ?>
@@ -99,11 +99,11 @@
                         <div class="bg-white rounded-2xl shadow-sm border border-gray-100/50 hover:shadow-2xl hover:border-cyan-100 transition-all duration-300 flex flex-col overflow-hidden group transform hover:-translate-y-1 cursor-pointer food-card"
                              data-name="<?= htmlspecialchars($food['name']) ?>"
                              data-price="Rp <?= number_format($food['price'] ?? 0, 0, ',', '.') ?>"
-                             data-image="<?= BASEURL ?>/images/foods/<?= htmlspecialchars($food['image_name']) ?>"
+                             data-image="<?= BASEURL ?>/uploads/food/<?= htmlspecialchars($food['image']) ?>"
                              data-description="<?= htmlspecialchars($food['description']) ?>">
                             <div class="relative h-64 overflow-hidden bg-gray-100">
                                 <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent group-hover:from-gray-900/60 transition-all z-10"></div>
-                                <img src="<?= BASEURL ?>/images/foods/<?= htmlspecialchars($food['image_name']) ?>" alt="<?= htmlspecialchars($food['name']) ?>" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-700 ease-in-out" onerror="this.src='https://ui-avatars.com/api/?name=<?= urlencode($food['name'] ?? 'Food') ?>&background=random&color=fff'">
+                                <img src="<?= BASEURL ?>/uploads/food/<?= htmlspecialchars($food['image']) ?>" alt="<?= htmlspecialchars($food['name']) ?>" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-700 ease-in-out" onerror="this.src='https://ui-avatars.com/api/?name=<?= urlencode($food['name'] ?? 'Food') ?>&background=random&color=fff'">
                                 <div class="absolute bottom-4 left-4 z-20">
                                     <span class="bg-white text-secondary font-black px-4 py-1.5 rounded-full shadow-lg text-lg ring-4 ring-white/30 truncate block max-w-full">
                                         Rp <?= number_format($food['price'] ?? 0, 0, ',', '.') ?>
@@ -116,7 +116,7 @@
                                 </div>
                                 <div class="mt-auto pt-4 border-t border-gray-50">
                                     <form class="add-to-cart-form">
-                                        <input type="hidden" name="food_id" value="<?= $food['food_id'] ?>">
+                                        <input type="hidden" name="food_id" value="<?= $food['id'] ?>">
                                         <input type="hidden" name="qty" value="1">
                                         <button type="submit" class="add-to-cart-btn w-full py-2.5 bg-gray-50 border border-gray-200 text-secondary font-semibold text-sm rounded-xl hover:bg-primary hover:border-primary hover:text-white transition-all flex items-center justify-center gap-2 group/btn relative overflow-hidden">
                                             <span class="relative z-10 flex items-center gap-2 btn-text"><i class="fas fa-cart-plus text-base"></i> Tambah Keranjang</span>
@@ -261,7 +261,7 @@
             category: currentCategory
         });
 
-        fetch(`${baseUrl}/menu/fetchFoods?${params.toString()}`)
+        fetch(`${baseUrl}/menu/getFood?${params.toString()}`)
             .then(response => response.json())
             .then(data => {
                 renderFoods(data);
@@ -307,11 +307,11 @@
                      style="animation-delay: ${index * 50}ms;"
                      data-name="${escapeHtml(food.name)}"
                      data-price="${priceFormatted}"
-                     data-image="${data.baseurl}/images/foods/${escapeHtml(food.image_name)}"
+                     data-image="${data.baseurl}/uploads/food/${escapeHtml(food.image)}"
                      data-description="${escapeHtml(food.description)}">
                     <div class="relative h-64 overflow-hidden bg-gray-100">
                         <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent group-hover:from-gray-900/60 transition-all z-10"></div>
-                        <img src="${data.baseurl}/images/foods/${escapeHtml(food.image_name)}" alt="${escapeHtml(food.name)}" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-700 ease-in-out" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(food.name)}&background=random&color=fff'">
+                        <img src="${data.baseurl}/uploads/food/${escapeHtml(food.image)}" alt="${escapeHtml(food.name)}" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-700 ease-in-out" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(food.name)}&background=random&color=fff'">
                         <div class="absolute bottom-4 left-4 z-20">
                             <span class="bg-white text-secondary font-black px-4 py-1.5 rounded-full shadow-lg text-lg ring-4 ring-white/30 truncate block max-w-full">
                                 ${priceFormatted}
@@ -324,7 +324,7 @@
                         </div>
                         <div class="mt-auto pt-4 border-t border-gray-50">
                             <form class="add-to-cart-form">
-                                <input type="hidden" name="food_id" value="${food.food_id}">
+                                <input type="hidden" name="food_id" value="${food.id}">
                                 <input type="hidden" name="qty" value="1">
                                 <button type="submit" class="add-to-cart-btn w-full py-2.5 bg-gray-50 border border-gray-200 text-secondary font-semibold text-sm rounded-xl hover:bg-primary hover:border-primary hover:text-white transition-all flex items-center justify-center gap-2 group/btn relative overflow-hidden">
                                     <span class="relative z-10 flex items-center gap-2 btn-text"><i class="fas fa-cart-plus text-base"></i> Tambah Keranjang</span>

@@ -49,9 +49,9 @@ ob_start();
                     ?>
                         <div class="p-6 grid grid-cols-1 sm:grid-cols-12 gap-6 relative items-center group">
                             <div class="col-span-1 sm:col-span-6 flex gap-4 items-center">
-                                <input type="checkbox" name="selected_items[]" value="<?= $item['detail_id'] ?>" class="item-checkbox w-5 h-5 text-primary rounded border-gray-300 focus:ring-primary" checked data-price="<?= $item['price'] ?>" data-qty="<?= $item['qty'] ?>" onchange="updateTotal()">
+                                <input type="checkbox" name="selected_items[]" value="<?= $item['id'] ?>" class="item-checkbox w-5 h-5 text-primary rounded border-gray-300 focus:ring-primary" checked data-price="<?= $item['price'] ?>" data-qty="<?= $item['qty'] ?>" onchange="updateTotal()">
                                 <div class="w-20 h-20 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
-                                    <img src="<?= BASEURL ?>/images/foods/<?= htmlspecialchars($item['image_name']) ?>" alt="<?= htmlspecialchars($item['name']) ?>" class="w-full h-full object-cover">
+                                    <img src="<?= BASEURL ?>/uploads/food/<?= htmlspecialchars($item['image']) ?>" alt="<?= htmlspecialchars($item['name']) ?>" class="w-full h-full object-cover">
                                 </div>
                                 <div>
                                     <h4 class="font-bold text-gray-800 text-lg"><?= htmlspecialchars($item['name']) ?></h4>

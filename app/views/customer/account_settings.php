@@ -1,22 +1,18 @@
 <?php 
-$page_title = "Edit Profil";
+$page_title = "Pengaturan Akun";
 $back_link = BASEURL . "/customer/profile";
 $hide_card = true;
 ob_start(); 
 ?>
 
-<div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-    <div class="p-6 border-b border-gray-100 flex items-center justify-between">
-        <h2 class="text-2xl font-bold text-gray-800">Pengaturan Akun</h2>
-    </div>
-    
+<div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">    
     <div class="p-8">
-        <?php if(isset($error)): ?>
+        <?php if(!empty($error)): ?>
             <div class="bg-cyan-50 text-primary p-4 rounded-lg mb-6 flex items-center gap-3">
                 <i class="fas fa-exclamation-circle text-xl"></i> <?= htmlspecialchars($error) ?>
             </div>
         <?php endif; ?>
-        <?php if(isset($success)): ?>
+        <?php if(!empty($success)): ?>
             <div class="bg-green-50 text-green-600 p-4 rounded-lg mb-6 flex items-center gap-3">
                 <i class="fas fa-check-circle text-xl"></i> <?= htmlspecialchars($success) ?>
             </div>
@@ -25,7 +21,7 @@ ob_start();
         <form action="<?= BASEURL ?>/customer/updateProfile" method="POST" enctype="multipart/form-data" class="space-y-6">
             <?= CSRF::getTokenField() ?>
             
-            <div class="flex items-center gap-6 p-4 bg-gray-50 rounded-xl border border-gray-200">
+            <div class="flex items-center gap-6 p-4 bg-gray-50 rounded-xl border border-gray-200 !mt-1">
                 <div class="relative group">
                     <img id="profileImagePreview" src="<?= BASEURL ?>/images/users/<?= htmlspecialchars($user['img_user'] ?? 'default.jpg') ?>" class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-md" onerror="this.src='https://ui-avatars.com/api/?name=<?= urlencode($user['username'] ?? 'User') ?>&background=E53E3E&color=fff'">
                     <label class="absolute inset-0 bg-black/50 text-white rounded-full flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 cursor-pointer transition">

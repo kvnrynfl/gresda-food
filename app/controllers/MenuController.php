@@ -1,62 +1,75 @@
 <?php
 
-class MenuController extends Controller {
-
-    public function index() {
-        $this->processMenuRequest('all');
-    }
-    
-    public function category($slug = '') {
-        $this->processMenuRequest($slug);
-    }
-
-    private function processMenuRequest($categorySlug) {
-        $categoryModel = $this->model('CategoryModel');
+/**
+ * Menu Controller
+ */
+class MenuController extends Controller
+{
+    public function index()
+    {
         $foodModel = $this->model('FoodModel');
-        
-        // Get Filters from URL
-        $keyword = isset($_GET['q']) ? trim($_GET['q']) : '';
-        $sort = isset($_GET['sort']) ? $_GET['sort'] : 'newest';
+        $categoryModel = $this->model('CategoryModel');
 
-        // Set active category and fetch data
-        if ($categorySlug !== 'all') {
-            $category = $categoryModel->getByCategorySlug($categorySlug);
-            $data['title'] = 'Kategori: ' . ($category['name'] ?? 'Tidak Ditemukan');
-            // Fallback if category invalid
-            if (!$category) $categorySlug = 'all';
-        } else {
-            $data['title'] = 'Temukan Menu Favoritmu';
-        }
+        $keyword = $_GET['q'] ?? $_GET['keyword'] ?? '';
+        $category = $_GET['category'] ?? 'all';
+        $sort = $_GET['sort'] ?? 'newest';
 
-        $data['categories'] = $categoryModel->getActive();
-        $data['active_category'] = $categorySlug;
-        $data['search_keyword'] = $keyword;
-        $data['active_sort'] = $sort;
+        $foods = $foodModel->getFiltered($keyword, $category, $sort);
+        $categories = $categoryModel->getActive();
 
-        // Fetch filtered foods
-        $data['foods'] = $foodModel->getFiltered($keyword, $categorySlug, $sort);
-
-        $this->view('home/menu', $data);
+        $this->view('home/menu', [
+            'title' => 'Menu Kami',
+            'foods' => $foods,
+            'categories' => $categories,
+            'active_category' => $category,
+            'active_sort' => $sort,
+            'search_keyword' => $keyword,
+        ]);
     }
 
-    public function fetchFoods() {
-        if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-            $foodModel = $this->model('FoodModel');
-            
-            $keyword = isset($_GET['q']) ? trim($_GET['q']) : '';
-            $categorySlug = isset($_GET['category']) ? $_GET['category'] : 'all';
-            $sort = isset($_GET['sort']) ? $_GET['sort'] : 'newest';
-            
-            $foods = $foodModel->getFiltered($keyword, $categorySlug, $sort);
-            
-            header('Content-Type: application/json');
-            echo json_encode([
-                'status' => 'success',
-                'foods' => $foods,
-                'count' => count($foods),
-                'baseurl' => BASEURL
-            ]);
-            exit;
+    /**
+     * AJAX endpoint for food data
+     */
+    public function getFood()
+    {
+        $foodModel = $this->model('FoodModel');
+
+        $keyword = $_GET['q'] ?? $_GET['keyword'] ?? '';
+        $category = $_GET['category'] ?? 'all';
+        $sort = $_GET['sort'] ?? 'newest';
+
+        $foods = $foodModel->getFiltered($keyword, $category, $sort);
+
+        $this->json([
+            'status' => 'success',
+            'foods' => $foods,
+            'count' => count($foods),
+            'baseurl' => BASEURL,
+        ]);
+    }
+
+    /**
+     * Show single food detail
+     */
+    public function detail($id = '')
+    {
+        if (empty($id)) {
+            $this->show404();
         }
+
+        $foodModel = $this->model('FoodModel');
+        $food = $foodModel->getById($id);
+
+        if (!$food || !$food['is_active']) {
+            $this->show404();
+        }
+
+        // Get related foods from same category
+        $related = $foodModel->getByCategory($food['category_slug']);
+
+        $this->view('menu/detail', [
+            'food' => $food,
+            'related' => $related,
+        ]);
     }
 }

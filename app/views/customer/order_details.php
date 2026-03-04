@@ -13,8 +13,8 @@ ob_start();
                     <i class="fas fa-receipt text-xl"></i>
                 </div>
                 <div>
-                    <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-0.5">ID Pesanan</p>
-                    <h2 class="text-2xl font-black text-gray-900 font-mono tracking-tight leading-none">#<?= htmlspecialchars($order_id) ?></h2>
+                    <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-0.5">No. Pesanan</p>
+                    <h2 class="text-2xl font-black text-gray-900 font-mono tracking-tight leading-none"><?= htmlspecialchars($order['order_number'] ?? substr($order['id'] ?? '', 0, 8)) ?></h2>
                 </div>
             </div>
             <?php if(isset($order)): ?>
@@ -30,20 +30,20 @@ ob_start();
                     $statusClass = 'bg-gray-100 text-gray-600 border-gray-200';
                     $statusIcon = 'fa-clock';
                     $statusMap = [
-                        'Cart' => 'Keranjang',
-                        'Payment' => 'Menunggu Pembayaran',
-                        'Confirmed' => 'Dikonfirmasi',
-                        'Delivery' => 'Sedang Dikirim',
-                        'Finished' => 'Pesanan Selesai',
-                        'Canceled' => 'Dibatalkan'
+                        'pending_payment' => 'Menunggu Pembayaran',
+                        'confirmed' => 'Dikonfirmasi',
+                        'processing' => 'Sedang Diproses',
+                        'delivering' => 'Sedang Dikirim',
+                        'finished' => 'Pesanan Selesai',
+                        'cancelled' => 'Dibatalkan'
                     ];
                     switch($order['status']) {
-                        case 'Cart': $statusClass = 'bg-gray-100 text-gray-600 border-gray-200'; $statusIcon = 'fa-shopping-cart'; break;
-                        case 'Payment': $statusClass = 'bg-blue-50 text-blue-700 border-blue-200'; $statusIcon = 'fa-wallet'; break;
-                        case 'Confirmed': $statusClass = 'bg-indigo-50 text-indigo-700 border-indigo-200'; $statusIcon = 'fa-check-circle'; break;
-                        case 'Delivery': $statusClass = 'bg-orange-50 text-orange-700 border-orange-200'; $statusIcon = 'fa-motorcycle'; break;
-                        case 'Finished': $statusClass = 'bg-green-50 text-green-700 border-green-200'; $statusIcon = 'fa-flag-checkered'; break;
-                        case 'Canceled': $statusClass = 'bg-red-50 text-red-700 border-red-200'; $statusIcon = 'fa-times-circle'; break;
+                        case 'pending_payment': $statusClass = 'bg-blue-50 text-blue-700 border-blue-200'; $statusIcon = 'fa-wallet'; break;
+                        case 'confirmed': $statusClass = 'bg-indigo-50 text-indigo-700 border-indigo-200'; $statusIcon = 'fa-check-circle'; break;
+                        case 'processing': $statusClass = 'bg-violet-50 text-violet-700 border-violet-200'; $statusIcon = 'fa-cog'; break;
+                        case 'delivering': $statusClass = 'bg-orange-50 text-orange-700 border-orange-200'; $statusIcon = 'fa-motorcycle'; break;
+                        case 'finished': $statusClass = 'bg-green-50 text-green-700 border-green-200'; $statusIcon = 'fa-flag-checkered'; break;
+                        case 'cancelled': $statusClass = 'bg-red-50 text-red-700 border-red-200'; $statusIcon = 'fa-times-circle'; break;
                     }
                     $statusText = $statusMap[$order['status']] ?? $order['status'];
                 ?>
@@ -61,18 +61,18 @@ ob_start();
         </div>
     </div>
     
-    <?php if(isset($order) && $order['status'] !== 'Cart'): ?>
+    <?php if(isset($order)): ?>
     <?php
-        $steps = ['Payment' => 'Menunggu Pembayaran', 'Confirmed' => 'Dikonfirmasi', 'Delivery' => 'Dikirim', 'Finished' => 'Selesai'];
+        $steps = ['pending_payment' => 'Menunggu Pembayaran', 'confirmed' => 'Dikonfirmasi', 'delivering' => 'Dikirim', 'finished' => 'Selesai'];
         $currentStatus = $order['status'];
-        $isCanceled = ($currentStatus === 'Canceled');
+        $isCancelled = ($currentStatus === 'cancelled');
         $statusKeys = array_keys($steps);
         $currentIndex = array_search($currentStatus, $statusKeys);
-        if ($currentIndex === false && !$isCanceled) $currentIndex = -1;
+        if ($currentIndex === false && !$isCancelled) $currentIndex = -1;
     ?>
     <div class="px-4 sm:px-8 py-8 border-b border-gray-100 bg-gray-50/30">
         <div class="max-w-3xl mx-auto">
-            <?php if($isCanceled): ?>
+            <?php if($isCancelled): ?>
                 <div class="text-center py-4">
                     <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-100 text-red-600 mb-3 border-4 border-white shadow-sm">
                         <i class="fas fa-times text-2xl"></i>
@@ -115,27 +115,21 @@ ob_start();
             </div>
         <?php else: ?>
             <div class="space-y-6">
-                <?php 
-                $totalPrice = 0;
-                foreach($details as $item): 
-                    // Note: We use original price without multiplier here
-                    $subtotal = ($item['price'] ?? 0) * ($item['qty'] ?? 1);
-                    $totalPrice += $subtotal;
-                ?>
+                <?php foreach($details as $item): ?>
                     <div class="flex items-center justify-between border-b border-gray-100 pb-6 last:border-0 last:pb-0">
                         <div class="flex items-center gap-4">
                             <div class="w-20 h-20 bg-gray-100 rounded-xl overflow-hidden shadow-sm flex-shrink-0">
-                                <img src="<?= BASEURL ?>/images/foods/<?= htmlspecialchars($item['image_name'] ?? 'default.jpg') ?>" alt="<?= htmlspecialchars($item['name'] ?? 'Menu') ?>" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=<?= urlencode($item['name'] ?? 'Menu') ?>&background=random&color=fff'">
+                                <img src="<?= BASEURL ?>/uploads/food/<?= htmlspecialchars($item['image'] ?? 'default.jpg') ?>" alt="<?= htmlspecialchars($item['food_name'] ?? 'Menu') ?>" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=<?= urlencode($item['food_name'] ?? 'Menu') ?>&background=random&color=fff'">
                             </div>
                             <div>
-                                <h4 class="font-bold text-gray-800 text-lg"><?= htmlspecialchars($item['name'] ?? 'Item') ?></h4>
+                                <h4 class="font-bold text-gray-800 text-lg"><?= htmlspecialchars($item['food_name'] ?? 'Item') ?></h4>
                                 <p class="text-sm text-gray-500 font-medium">
-                                    <?= htmlspecialchars($item['qty'] ?? 1) ?>x @ Rp <?= number_format($item['price'] ?? 0, 0, ',', '.') ?>
+                                    <?= htmlspecialchars($item['qty'] ?? 1) ?>x @ Rp <?= number_format($item['unit_price'] ?? 0, 0, ',', '.') ?>
                                 </p>
                             </div>
                         </div>
                         <div class="text-right">
-                            <span class="font-bold text-gray-900 text-lg">Rp <?= number_format($subtotal, 0, ',', '.') ?></span>
+                            <span class="font-bold text-gray-900 text-lg">Rp <?= number_format($item['subtotal'] ?? (($item['unit_price'] ?? 0) * ($item['qty'] ?? 1)), 0, ',', '.') ?></span>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -143,63 +137,63 @@ ob_start();
         <?php endif; ?>
     </div>
     
-    <?php if(!empty($details)): ?>
+    <?php if(!empty($details) && isset($order)): ?>
     <div class="bg-gray-50 p-8 border-t border-gray-100">
         <div class="flex justify-between items-center mb-3">
             <span class="font-medium text-gray-600">Subtotal Item</span>
-            <span class="font-bold text-gray-800">Rp <?= number_format($totalPrice, 0, ',', '.') ?></span>
+            <span class="font-bold text-gray-800">Rp <?= number_format($order['subtotal'] ?? 0, 0, ',', '.') ?></span>
         </div>
         <div class="flex justify-between items-center mb-3">
-            <span class="font-medium text-gray-600">Pajak (10%)</span>
-            <span class="font-bold text-gray-800">Rp <?= number_format($totalPrice * 0.1, 0, ',', '.') ?></span>
+            <span class="font-medium text-gray-600">Pajak (PPN 10%)</span>
+            <span class="font-bold text-gray-800">Rp <?= number_format($order['tax_amount'] ?? 0, 0, ',', '.') ?></span>
         </div>
         <div class="flex justify-between items-center mb-6">
             <span class="font-medium text-gray-600">Pengiriman</span>
-            <span class="font-bold text-gray-800">Rp 15.000</span>
+            <span class="font-bold text-gray-800">Rp <?= number_format($order['shipping_cost'] ?? 0, 0, ',', '.') ?></span>
         </div>
         <div class="flex justify-between items-center pt-6 border-t border-gray-200">
             <span class="text-xl font-bold text-gray-900">Total Keseluruhan</span>
-            <span class="text-3xl font-extrabold text-primary">Rp <?= number_format(($totalPrice * 1.1) + 15000, 0, ',', '.') ?></span>
+            <span class="text-3xl font-extrabold text-primary">Rp <?= number_format($order['grand_total'] ?? 0, 0, ',', '.') ?></span>
         </div>
     </div>
     </div>
     <?php endif; ?>
     
-    <?php if(isset($confirm) && !empty($confirm['image_name'])): ?>
+    <?php if(isset($payment) && !empty($payment['proof_image'])): ?>
     <div class="bg-gray-50 p-8 border-t border-gray-100">
         <h3 class="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
             <i class="fas fa-file-invoice-dollar text-primary"></i> Bukti Pembayaran
         </h3>
         <div class="flex flex-col sm:flex-row gap-8 items-start">
             <div class="w-full sm:w-1/2 bg-white p-2 rounded-2xl border border-gray-200 shadow-sm">
-                <img src="<?= BASEURL ?>/images/confirm/<?= htmlspecialchars($confirm['image_name']) ?>" alt="Bukti Pembayaran" class="w-full h-auto rounded-xl max-h-96 object-contain bg-gray-50" onerror="this.src='https://ui-avatars.com/api/?name=Bukti+Pembayaran&background=E53E3E&color=fff'">
+                <img src="<?= BASEURL ?>/uploads/payment/<?= htmlspecialchars($payment['proof_image']) ?>" alt="Bukti Pembayaran" class="w-full h-auto rounded-xl max-h-96 object-contain bg-gray-50" onerror="this.src='https://ui-avatars.com/api/?name=Bukti+Pembayaran&background=E53E3E&color=fff'">
             </div>
             <div class="w-full sm:w-1/2 space-y-4">
                 <div>
                     <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Metode Pembayaran</p>
-                    <p class="text-base font-semibold text-gray-800"><?= htmlspecialchars($confirm['payment'] ?? 'Transfer Bank') ?></p>
+                    <p class="text-base font-semibold text-gray-800"><?= htmlspecialchars($payment['payment_method_name'] ?? 'Transfer Bank') ?></p>
                 </div>
                 <div>
-                    <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Atas Nama Rekening</p>
-                    <p class="text-base font-semibold text-gray-800"><?= htmlspecialchars($confirm['rekening_name'] ?? '-') ?></p>
+                    <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Nama Pengirim</p>
+                    <p class="text-base font-semibold text-gray-800"><?= htmlspecialchars($payment['sender_name'] ?? '-') ?></p>
                 </div>
                 <div>
-                    <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Tanggal Upload</p>
+                    <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Tanggal Transfer</p>
                     <p class="text-base font-semibold text-gray-800">
-                        <?= !empty($confirm['tgl_pay']) && $confirm['tgl_pay'] !== '0000-00-00' ? date('d F Y', strtotime($confirm['tgl_pay'])) : 'Belum Diverifikasi' ?>
+                        <?= !empty($payment['payment_date']) && $payment['payment_date'] !== '0000-00-00' ? date('d F Y', strtotime($payment['payment_date'])) : 'Belum Diverifikasi' ?>
                     </p>
                 </div>
             </div>
         </div>
     </div>
-    <?php elseif(isset($order) && $order['status'] === 'Payment'): ?>
+    <?php elseif(isset($order) && $order['status'] === 'pending_payment'): ?>
     <div class="bg-red-50 p-8 border-t border-red-100 text-center">
         <div class="w-16 h-16 bg-red-100 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
             <i class="fas fa-exclamation-triangle text-2xl"></i>
         </div>
         <h3 class="text-xl font-bold text-red-800 mb-2">Menunggu Bukti Pembayaran</h3>
         <p class="text-red-600 mb-6 max-w-md mx-auto">Kami belum menerima bukti pembayaran untuk pesanan ini. Pesanan tidak akan diproses hingga pembayaran dikonfirmasi.</p>
-        <a href="<?= BASEURL ?>/customer/payment/<?= urlencode($order_id) ?>" class="inline-block px-8 py-3 bg-red-600 text-white rounded-xl font-bold shadow-lg shadow-red-500/30 hover:bg-red-700 transition relative">
+        <a href="<?= BASEURL ?>/customer/payment/<?= urlencode($order['id']) ?>" class="inline-block px-8 py-3 bg-red-600 text-white rounded-xl font-bold shadow-lg shadow-red-500/30 hover:bg-red-700 transition relative">
             <span class="absolute -top-1 -right-1 w-3 h-3 bg-red-400 rounded-full animate-ping"></span>
             <span class="absolute -top-1 -right-1 w-3 h-3 bg-red-600 border-2 border-white rounded-full"></span>
             <i class="fas fa-wallet mr-2"></i> Bayar Sekarang
