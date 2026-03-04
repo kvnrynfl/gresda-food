@@ -1,6 +1,5 @@
 # Lingkungan dan Konfigurasi
 /.env
-/.env.example
 *.log
 npm-debug.log*
 yarn-debug.log*
