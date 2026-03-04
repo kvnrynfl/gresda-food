@@ -31,7 +31,7 @@ if(!$is_empty): $sn=1; foreach($users as $client): ?>
         <td class="text-sm text-slate-400 font-bold text-center"><?= $sn++ ?>.</td>
         <td class="font-bold text-slate-800 align-middle">
             <div class="flex items-center gap-3 group-hover:text-indigo-600 transition-colors">
-                <img src="<?= BASEURL ?>/images/users/<?= htmlspecialchars($client['img_user'] ?? 'default.jpg') ?>" class="w-10 h-10 rounded-full ring-2 ring-white shadow-sm shrink-0" onerror="this.src='https://ui-avatars.com/api/?name=<?= urlencode($client['username']) ?>&background=random&color=fff'">
+                <img src="<?= BASEURL ?>/uploads/users/<?= htmlspecialchars($client['img_user'] ?? 'default.jpg') ?>" class="w-10 h-10 rounded-full ring-2 ring-white shadow-sm shrink-0" onerror="this.src='https://ui-avatars.com/api/?name=<?= urlencode($client['username']) ?>&background=random&color=fff'">
                 <span><?= htmlspecialchars($client['username']) ?></span>
             </div>
         </td>
@@ -63,7 +63,7 @@ if(!$is_empty): $sn=1; foreach($users as $client): ?>
                 <form action="<?= BASEURL ?>/admin/deleteClient/<?= urlencode($client['id']) ?>" method="POST" class="delete-form m-0 w-full" data-name="pelanggan <?= htmlspecialchars($client['username']) ?>">
                 <?= CSRF::getTokenField() ?>
                 <?php
-                    $type = 'button';
+                    $type = 'submit';
                     $color = 'red';
                     $icon = 'fas fa-trash-alt';
                     $btn_title = 'Revoke Pelanggan';

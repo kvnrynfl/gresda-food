@@ -85,10 +85,22 @@ if(!$is_empty): $sn=1; foreach($foods as $product): ?>
                     $btn_width = 'w-full';
                     include __DIR__ . '/../components/admin/ui/action_button.php';
                 ?>
+                <form action="<?= BASEURL ?>/admin/toggleFood/<?= urlencode($product['id']) ?>" method="POST" class="m-0 w-full">
+                    <?= CSRF::getTokenField() ?>
+                    <?php
+                        $type = 'submit';
+                        $color = !empty($product['is_active']) ? 'amber' : 'emerald';
+                        $icon = !empty($product['is_active']) ? 'fas fa-toggle-off' : 'fas fa-toggle-on';
+                        $btn_title = !empty($product['is_active']) ? 'Nonaktifkan' : 'Aktifkan';
+                        $btn_label = !empty($product['is_active']) ? 'Nonaktifkan' : 'Aktifkan';
+                        $btn_width = 'w-full';
+                        include __DIR__ . '/../components/admin/ui/action_button.php';
+                    ?>
+                </form>
                 <form action="<?= BASEURL ?>/admin/deleteFood/<?= urlencode($product['id']) ?>" method="POST" class="w-full delete-form m-0" data-name="<?= htmlspecialchars($product['name']) ?>">
                     <?= CSRF::getTokenField() ?>
                     <?php
-                        $type = 'button';
+                        $type = 'submit';
                         $color = 'red';
                         $icon = 'fas fa-trash-alt';
                         $btn_title = 'Hapus';

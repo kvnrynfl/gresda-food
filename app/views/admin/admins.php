@@ -83,7 +83,7 @@ if(!$is_empty): $sn=1; foreach($admins as $adminf): ?>
                 <form action="<?= BASEURL ?>/admin/deleteAdmin/<?= urlencode($adminf['id']) ?>" method="POST" class="delete-form m-0 w-full" data-name="Admin <?= htmlspecialchars($adminf['username']) ?>">
                     <?= CSRF::getTokenField() ?>
                     <?php
-                        $type = 'button';
+                        $type = 'submit';
                         $color = 'red';
                         $icon = 'fas fa-user-xmark';
                         $btn_title = 'Depresi Admin';

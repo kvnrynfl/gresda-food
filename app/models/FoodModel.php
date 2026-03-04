@@ -188,6 +188,13 @@ class FoodModel extends Database
         return $this->execute();
     }
 
+    public function toggleActive($id)
+    {
+        $this->query("UPDATE tbl_food SET is_active = IF(is_active = 1, 0, 1) WHERE id = :id");
+        $this->bind(':id', $id);
+        return $this->execute();
+    }
+
     /**
      * Get top selling items
      */

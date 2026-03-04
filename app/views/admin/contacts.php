@@ -55,7 +55,7 @@ if(!$is_empty): $sn=1; foreach($contacts as $contact): ?>
                 <form action="<?= BASEURL ?>/admin/deleteContact/<?= urlencode($contact['id']) ?>" method="POST" class="delete-form m-0 w-full" data-name="Pesan ini">
                     <?= CSRF::getTokenField() ?>
                     <?php
-                        $type = 'button';
+                        $type = 'submit';
                         $color = 'red';
                         $icon = 'fas fa-trash-alt';
                         $btn_title = 'Hapus Pesan';

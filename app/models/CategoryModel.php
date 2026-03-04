@@ -74,6 +74,13 @@ class CategoryModel extends Database
         return $this->execute();
     }
 
+    public function toggleActive($id)
+    {
+        $this->query("UPDATE tbl_category SET is_active = IF(is_active = 1, 0, 1) WHERE id = :id");
+        $this->bind(':id', $id);
+        return $this->execute();
+    }
+
     /**
      * Get category with food count
      */

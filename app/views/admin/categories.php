@@ -67,10 +67,22 @@ if(!$is_empty): $sn=1; foreach($categories as $index => $cat): ?>
                     $btn_width = 'w-full';
                     include __DIR__ . '/../components/admin/ui/action_button.php';
                 ?>
+                <form action="<?= BASEURL ?>/admin/toggleCategory/<?= urlencode($cat['id']) ?>" method="POST" class="m-0 w-full">
+                    <?= CSRF::getTokenField() ?>
+                    <?php
+                        $type = 'submit';
+                        $color = !empty($cat['is_active']) ? 'amber' : 'emerald';
+                        $icon = !empty($cat['is_active']) ? 'fas fa-toggle-off' : 'fas fa-toggle-on';
+                        $btn_title = !empty($cat['is_active']) ? 'Nonaktifkan' : 'Aktifkan';
+                        $btn_label = !empty($cat['is_active']) ? 'Nonaktifkan' : 'Aktifkan';
+                        $btn_width = 'w-full';
+                        include __DIR__ . '/../components/admin/ui/action_button.php';
+                    ?>
+                </form>
                 <form action="<?= BASEURL ?>/admin/deleteCategory/<?= urlencode($cat['id']) ?>" method="POST" class="delete-form m-0 w-full" data-name="Kategori <?= htmlspecialchars($cat['name']) ?>">
                     <?= CSRF::getTokenField() ?>
                     <?php
-                        $type = 'button';
+                        $type = 'submit';
                         $color = 'red';
                         $icon = 'fas fa-trash-alt';
                         $btn_title = 'Hapus';

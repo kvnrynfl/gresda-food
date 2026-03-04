@@ -198,6 +198,30 @@ class AdminController extends Controller
         $this->redirect('/admin/categories');
     }
 
+    /**
+     * Toggle category active status
+     */
+    public function toggleCategory($id = '')
+    {
+        $this->checkAdmin();
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST' || empty($id)) {
+            $this->redirect('/admin/categories');
+            return;
+        }
+
+        if (!CSRF::verifyToken($_POST['csrf_token'] ?? '')) {
+            $this->redirect('/admin/categories');
+            return;
+        }
+
+        $categoryModel = $this->model('CategoryModel');
+        $categoryModel->toggleActive($id);
+
+        $this->adminFlash('Status kategori berhasil diubah.');
+        $this->redirect('/admin/categories');
+    }
+
     // ═══════════════════════════════════════════════════════════════
     // FOOD ITEMS
     // ═══════════════════════════════════════════════════════════════
@@ -355,6 +379,30 @@ class AdminController extends Controller
         $foodModel->delete($id);
 
         $this->adminFlash('Menu berhasil dihapus.');
+        $this->redirect('/admin/foods');
+    }
+
+    /**
+     * Toggle food active status
+     */
+    public function toggleFood($id = '')
+    {
+        $this->checkAdmin();
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST' || empty($id)) {
+            $this->redirect('/admin/foods');
+            return;
+        }
+
+        if (!CSRF::verifyToken($_POST['csrf_token'] ?? '')) {
+            $this->redirect('/admin/foods');
+            return;
+        }
+
+        $foodModel = $this->model('FoodModel');
+        $foodModel->toggleActive($id);
+
+        $this->adminFlash('Status menu berhasil diubah.');
         $this->redirect('/admin/foods');
     }
 
@@ -869,5 +917,183 @@ class AdminController extends Controller
 
         $this->adminFlash('Pesan berhasil dihapus.');
         $this->redirect('/admin/contacts');
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // PAYMENT METHODS
+    // ═══════════════════════════════════════════════════════════════
+
+    public function paymentMethods()
+    {
+        $this->checkAdmin();
+        $paymentMethodModel = $this->model('PaymentMethodModel');
+
+        $this->view('admin/payment_methods', [
+            'methods' => $paymentMethodModel->getAll(),
+        ]);
+    }
+
+    /**
+     * Show payment method details
+     */
+    public function paymentMethodDetails($id = '')
+    {
+        $this->checkAdmin();
+        if (empty($id)) {
+            $this->show404();
+        }
+
+        $paymentMethodModel = $this->model('PaymentMethodModel');
+        $method = $paymentMethodModel->getById($id);
+
+        if (!$method) {
+            $this->show404();
+        }
+
+        $this->view('admin/payment_method_details', ['method' => $method]);
+    }
+
+    /**
+     * Show create payment method form (GET) or process creation (POST)
+     */
+    public function createPaymentMethod()
+    {
+        $this->checkAdmin();
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->view('admin/payment_method_create');
+            return;
+        }
+
+        if (!CSRF::verifyToken($_POST['csrf_token'] ?? '')) {
+            $this->redirect('/admin/paymentMethods');
+            return;
+        }
+
+        $_POST = Sanitize::array($_POST);
+
+        // Handle icon upload
+        $icon = null;
+        if (isset($_FILES['icon']) && $_FILES['icon']['error'] === UPLOAD_ERR_OK) {
+            $icon = Upload::image($_FILES['icon'], 'payment-methods');
+        }
+
+        $paymentMethodModel = $this->model('PaymentMethodModel');
+        $isActive = ($_POST['is_active'] ?? '1') == '1' ? 1 : 0;
+
+        $paymentMethodModel->create([
+            'name' => $_POST['name'],
+            'type' => $_POST['type'] ?? 'bank_transfer',
+            'account_number' => $_POST['account_number'],
+            'account_name' => $_POST['account_name'],
+            'icon' => $icon,
+            'instructions' => $_POST['instructions'] ?? null,
+            'is_active' => $isActive,
+            'sort_order' => (int)($_POST['sort_order'] ?? 0),
+        ]);
+
+        $this->adminFlash('Metode pembayaran berhasil ditambahkan.');
+        $this->redirect('/admin/paymentMethods');
+    }
+
+    /**
+     * Show edit payment method form (GET) or process update (POST)
+     */
+    public function editPaymentMethod($id = '')
+    {
+        $this->checkAdmin();
+        if (empty($id)) {
+            $this->show404();
+        }
+
+        $paymentMethodModel = $this->model('PaymentMethodModel');
+        $method = $paymentMethodModel->getById($id);
+
+        if (!$method) {
+            $this->show404();
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (!CSRF::verifyToken($_POST['csrf_token'] ?? '')) {
+                $this->redirect('/admin/paymentMethods');
+                return;
+            }
+
+            $_POST = Sanitize::array($_POST);
+
+            $icon = $method['icon'];
+            if (isset($_FILES['icon']) && $_FILES['icon']['error'] === UPLOAD_ERR_OK) {
+                // Delete old icon if exists
+                if (!empty($method['icon'])) {
+                    Upload::delete($method['icon'], 'payment-methods');
+                }
+                $icon = Upload::image($_FILES['icon'], 'payment-methods');
+            }
+
+            $isActive = ($_POST['is_active'] ?? '1') == '1' ? 1 : 0;
+
+            $paymentMethodModel->update($id, [
+                'name' => $_POST['name'],
+                'type' => $_POST['type'] ?? 'bank_transfer',
+                'account_number' => $_POST['account_number'],
+                'account_name' => $_POST['account_name'],
+                'icon' => $icon,
+                'instructions' => $_POST['instructions'] ?? null,
+                'is_active' => $isActive,
+                'sort_order' => (int)($_POST['sort_order'] ?? 0),
+            ]);
+
+            $this->adminFlash('Metode pembayaran berhasil diperbarui.');
+            $this->redirect('/admin/paymentMethods');
+            return;
+        }
+
+        $this->view('admin/payment_method_edit', ['method' => $method]);
+    }
+
+    public function deletePaymentMethod($id = '')
+    {
+        $this->checkAdmin();
+        if (empty($id)) {
+            $this->redirect('/admin/paymentMethods');
+            return;
+        }
+
+        $paymentMethodModel = $this->model('PaymentMethodModel');
+        $method = $paymentMethodModel->getById($id);
+
+        // Delete icon file if exists
+        if ($method && !empty($method['icon'])) {
+            Upload::delete($method['icon'], 'payment-methods');
+        }
+
+        $paymentMethodModel->delete($id);
+
+        $this->adminFlash('Metode pembayaran berhasil dihapus.');
+        $this->redirect('/admin/paymentMethods');
+    }
+
+    /**
+     * Toggle payment method active status
+     */
+    public function togglePaymentMethod($id = '')
+    {
+        $this->checkAdmin();
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST' || empty($id)) {
+            $this->redirect('/admin/paymentMethods');
+            return;
+        }
+
+        if (!CSRF::verifyToken($_POST['csrf_token'] ?? '')) {
+            $this->redirect('/admin/paymentMethods');
+            return;
+        }
+
+        $paymentMethodModel = $this->model('PaymentMethodModel');
+        $paymentMethodModel->toggleActive($id);
+
+        $this->adminFlash('Status metode pembayaran berhasil diubah.');
+        $this->redirect('/admin/paymentMethods');
     }
 }

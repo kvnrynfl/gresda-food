@@ -18,13 +18,15 @@ $btn_title = $btn_title ?? '';
 
 // Ultra refined action button color mappings
 $colorMap = [
-    'indigo' => 'bg-indigo-50 text-indigo-600 hover:bg-indigo-600 ring-indigo-500/10 hover:shadow-indigo-500/30',
-    'blue'   => 'bg-blue-50 text-blue-600 hover:bg-blue-600 ring-blue-500/10 hover:shadow-blue-500/30',
-    'cyan'   => 'bg-cyan-50 text-cyan-600 hover:bg-cyan-600 ring-cyan-500/10 hover:shadow-cyan-500/30',
-    'red'    => 'bg-rose-50 text-rose-600 hover:bg-rose-600 ring-rose-500/10 hover:shadow-rose-500/30',
-    'green'  => 'bg-emerald-50 text-emerald-600 hover:bg-emerald-600 ring-emerald-500/10 hover:shadow-emerald-500/30',
-    'yellow' => 'bg-amber-50 text-amber-600 hover:bg-amber-500 ring-amber-500/10 hover:shadow-amber-500/30',
-    'gray'   => 'bg-slate-100 text-slate-600 hover:bg-slate-700 ring-slate-500/10 hover:shadow-slate-500/30'
+    'indigo'  => 'bg-indigo-50 text-indigo-600 hover:bg-indigo-600 ring-indigo-500/10 hover:shadow-indigo-500/30',
+    'blue'    => 'bg-blue-50 text-blue-600 hover:bg-blue-600 ring-blue-500/10 hover:shadow-blue-500/30',
+    'cyan'    => 'bg-cyan-50 text-cyan-600 hover:bg-cyan-600 ring-cyan-500/10 hover:shadow-cyan-500/30',
+    'red'     => 'bg-rose-50 text-rose-600 hover:bg-rose-600 ring-rose-500/10 hover:shadow-rose-500/30',
+    'green'   => 'bg-emerald-50 text-emerald-600 hover:bg-emerald-600 ring-emerald-500/10 hover:shadow-emerald-500/30',
+    'emerald' => 'bg-emerald-50 text-emerald-600 hover:bg-emerald-600 ring-emerald-500/10 hover:shadow-emerald-500/30',
+    'amber'   => 'bg-amber-50 text-amber-600 hover:bg-amber-500 ring-amber-500/10 hover:shadow-amber-500/30',
+    'yellow'  => 'bg-amber-50 text-amber-600 hover:bg-amber-500 ring-amber-500/10 hover:shadow-amber-500/30',
+    'gray'    => 'bg-slate-100 text-slate-600 hover:bg-slate-700 ring-slate-500/10 hover:shadow-slate-500/30'
 ];
 
 $c = $colorMap[$color] ?? $colorMap['indigo'];

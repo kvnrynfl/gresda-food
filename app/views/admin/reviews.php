@@ -95,7 +95,7 @@ if(!$is_empty): $sn=1; foreach($reviews as $review): ?>
                         <?= CSRF::getTokenField() ?>
                         <input type="hidden" name="status" value="approved">
                         <?php
-                            $type = 'button';
+                            $type = 'submit';
                             $color = 'green';
                             $icon = 'fas fa-check';
                             $btn_title = 'Tampilkan';
@@ -111,7 +111,7 @@ if(!$is_empty): $sn=1; foreach($reviews as $review): ?>
                         <?= CSRF::getTokenField() ?>
                         <input type="hidden" name="status" value="rejected">
                         <?php
-                            $type = 'button';
+                            $type = 'submit';
                             $color = 'gray';
                             $icon = 'fas fa-eye-slash';
                             $btn_title = 'Sembunyikan';
@@ -125,7 +125,7 @@ if(!$is_empty): $sn=1; foreach($reviews as $review): ?>
                 <form action="<?= BASEURL ?>/admin/deleteTestimonial/<?= urlencode($review['id']) ?>" method="POST" class="delete-form m-0 w-full" data-name="Testimoni ini">
                     <?= CSRF::getTokenField() ?>
                     <?php
-                        $type = 'button';
+                        $type = 'submit';
                         $color = 'red';
                         $icon = 'fas fa-trash-alt';
                         $btn_title = 'Hapus';
