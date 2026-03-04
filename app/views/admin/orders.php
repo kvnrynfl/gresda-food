@@ -87,7 +87,7 @@ if(!$is_empty): $sn=1; foreach($orders as $transaction): ?>
                     include __DIR__ . '/../components/admin/ui/action_button.php';
 
                     if (!in_array($transaction['status'], ['finished', 'cancelled'])):
-                    $type = 'submit';
+                    $type = 'button';
                     $color = 'amber';
                     $icon = 'fas fa-sync-alt';
                     $btn_title = 'Ubah Status Pesanan';
